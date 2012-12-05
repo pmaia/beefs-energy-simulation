@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ManelSim</groupId>
-	<artifactId>ManelSim</artifactId>
+	<groupId>beefs-energy-simulation</groupId>
+	<artifactId>beefs-energy-simulation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ManelSim</name>
-	<description>The discrete events simulator originally written by Manel, the legendary programmer.</description>
+	<name>beefs-energy-simulation</name>
+	<description>Simulates the energy consumption on BeeFS</description>
 
 	<build>
 		<plugins>
