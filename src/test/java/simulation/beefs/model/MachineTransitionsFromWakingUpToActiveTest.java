@@ -2,6 +2,10 @@ package simulation.beefs.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import manelsim.EventScheduler;
+import manelsim.EventSource;
+import manelsim.Time;
+import manelsim.Time.Unit;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,10 +13,6 @@ import org.junit.Test;
 import simulation.beefs.event.machine.UserActivity;
 import simulation.beefs.model.Machine.State;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
-import core.EventScheduler;
-import core.EventSource;
-import core.Time;
-import core.Time.Unit;
 
 /**
  * 

@@ -3,13 +3,13 @@ package simulation.beefs.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import manelsim.EventScheduler;
+import manelsim.Time;
+import manelsim.TimeInterval;
 import simulation.beefs.event.machine.Sleep;
 import simulation.beefs.event.machine.UserActivity;
 import simulation.beefs.event.machine.UserIdleness;
 import simulation.beefs.event.machine.WakeOnLan;
-import core.EventScheduler;
-import core.Time;
-import core.TimeInterval;
 
 /**
  *

@@ -1,7 +1,7 @@
 package simulation.beefs.event.filesystem;
 
-import core.Event;
-import core.Time;
+import manelsim.Event;
+import manelsim.Time;
 
 public class UpdateFileReplicas extends Event {
 	

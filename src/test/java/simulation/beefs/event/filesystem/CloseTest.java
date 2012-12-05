@@ -7,6 +7,11 @@ import static org.easymock.EasyMock.verify;
 import java.util.HashSet;
 import java.util.Set;
 
+import manelsim.EventScheduler;
+import manelsim.EventSourceMultiplexer;
+import manelsim.Time;
+import manelsim.Time.Unit;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,10 +20,6 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
-import core.EventScheduler;
-import core.EventSourceMultiplexer;
-import core.Time;
-import core.Time.Unit;
 
 /**
  * @author Patrick Maia - patrickjem@lsd.ufcg.edu.br

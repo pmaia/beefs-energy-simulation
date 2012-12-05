@@ -1,8 +1,8 @@
 package simulation.beefs.event.machine;
 
+import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.Machine;
-import core.Time;
 
 /**
  *

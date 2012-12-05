@@ -7,6 +7,11 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import manelsim.Event;
+import manelsim.EventSource;
+import manelsim.Time;
+import manelsim.Time.Unit;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,10 +20,6 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.util.FakeFileSystemTraceStream;
-import core.Event;
-import core.EventSource;
-import core.Time;
-import core.Time.Unit;
 
 /**
  * 

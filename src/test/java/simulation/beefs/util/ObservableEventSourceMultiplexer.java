@@ -3,9 +3,9 @@ package simulation.beefs.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Event;
-import core.EventSource;
-import core.EventSourceMultiplexer;
+import manelsim.Event;
+import manelsim.EventSource;
+import manelsim.EventSourceMultiplexer;
 
 public class ObservableEventSourceMultiplexer extends EventSourceMultiplexer {
 	private List<Event> eventsList = new ArrayList<Event>();

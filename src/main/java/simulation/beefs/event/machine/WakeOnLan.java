@@ -1,8 +1,8 @@
 package simulation.beefs.event.machine;
 
+import manelsim.Event;
+import manelsim.Time;
 import simulation.beefs.model.Machine;
-import core.Event;
-import core.Time;
 
 /**
  * @author Patrick Maia

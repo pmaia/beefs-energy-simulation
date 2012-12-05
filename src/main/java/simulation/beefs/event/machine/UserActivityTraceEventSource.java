@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import manelsim.Event;
+import manelsim.EventSource;
+import manelsim.Time;
+import manelsim.Time.Unit;
 import simulation.beefs.model.Machine;
-import core.Event;
-import core.EventSource;
-import core.Time;
-import core.Time.Unit;
 
 
 /**

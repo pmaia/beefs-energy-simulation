@@ -2,17 +2,17 @@ package simulation.beefs.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import manelsim.EventScheduler;
+import manelsim.EventSource;
+import manelsim.EventSourceMultiplexer;
+import manelsim.Time;
+import manelsim.Time.Unit;
+import manelsim.TimeInterval;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import simulation.beefs.model.Machine.State;
-import core.EventScheduler;
-import core.EventSource;
-import core.EventSourceMultiplexer;
-import core.Time;
-import core.Time.Unit;
-import core.TimeInterval;
 
 /**
  * 

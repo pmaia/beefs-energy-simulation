@@ -5,15 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import manelsim.Context;
+import manelsim.Summarizer;
+import manelsim.TimeInterval;
 import simulation.beefs.energy.EnergyConsumptionModel;
 import simulation.beefs.energy.EnergyState;
 import simulation.beefs.energy.EnergyStateInterval;
 import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine.MachineStateInterval;
 import simulation.beefs.model.Machine.State;
-import core.Context;
-import core.Summarizer;
-import core.TimeInterval;
 
 /**
  * 

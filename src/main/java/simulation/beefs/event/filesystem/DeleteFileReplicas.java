@@ -1,8 +1,8 @@
 package simulation.beefs.event.filesystem;
 
+import manelsim.Event;
+import manelsim.Time;
 import simulation.beefs.model.ReplicatedFile;
-import core.Event;
-import core.Time;
 
 public class DeleteFileReplicas extends Event {
 

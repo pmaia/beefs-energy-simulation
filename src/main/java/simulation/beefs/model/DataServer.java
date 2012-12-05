@@ -3,8 +3,8 @@ package simulation.beefs.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Time;
-import core.TimeInterval;
+import manelsim.Time;
+import manelsim.TimeInterval;
 
 /**
  * 

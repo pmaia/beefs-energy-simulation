@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import manelsim.Event;
+import manelsim.EventSource;
+import manelsim.Time;
+import manelsim.Time.Unit;
 import simulation.beefs.model.FileSystemClient;
-import core.Event;
-import core.EventSource;
-import core.Time;
-import core.Time.Unit;
 
 /**
  * A parser for the trace of calls to the file system.

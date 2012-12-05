@@ -8,6 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import manelsim.EventScheduler;
+import manelsim.EventSource;
+import manelsim.Time;
+import manelsim.Time.Unit;
+import manelsim.TimeInterval;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,11 +25,6 @@ import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
-import core.EventScheduler;
-import core.EventSource;
-import core.Time;
-import core.Time.Unit;
-import core.TimeInterval;
 
 public class WriteTest {
 	

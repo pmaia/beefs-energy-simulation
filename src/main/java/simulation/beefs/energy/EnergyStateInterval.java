@@ -1,6 +1,6 @@
 package simulation.beefs.energy;
 
-import core.TimeInterval;
+import manelsim.TimeInterval;
 
 public class EnergyStateInterval {
 	private final EnergyState state;

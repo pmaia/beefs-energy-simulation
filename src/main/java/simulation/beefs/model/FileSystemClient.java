@@ -1,10 +1,10 @@
 package simulation.beefs.model;
 
+import manelsim.EventScheduler;
+import manelsim.Time;
+import manelsim.Time.Unit;
 import simulation.beefs.event.filesystem.Read;
 import simulation.beefs.event.filesystem.Write;
-import core.EventScheduler;
-import core.Time;
-import core.Time.Unit;
 
 
 /**

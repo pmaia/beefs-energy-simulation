@@ -1,9 +1,9 @@
 package simulation.beefs.event.machine;
 
+import manelsim.Event;
+import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.Machine;
-import core.Event;
-import core.Time;
 
 /**
  * An {@link Event} representing an idleness period.

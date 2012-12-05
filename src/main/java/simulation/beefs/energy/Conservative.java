@@ -2,7 +2,7 @@ package simulation.beefs.energy;
 
 import java.util.List;
 
-import core.Time;
+import manelsim.Time;
 
 /**
  * 

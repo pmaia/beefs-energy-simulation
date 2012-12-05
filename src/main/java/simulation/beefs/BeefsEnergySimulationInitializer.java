@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import manelsim.Context;
+import manelsim.EventSource;
+import manelsim.EventSourceMultiplexer;
+import manelsim.Initializer;
+import manelsim.Time;
+import manelsim.Time.Unit;
 import simulation.beefs.energy.EnergyConsumptionModel;
 import simulation.beefs.event.filesystem.FileSystemTraceEventSource;
 import simulation.beefs.event.machine.UserActivityTraceEventSource;
@@ -18,12 +24,6 @@ import simulation.beefs.model.DataServer;
 import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
-import core.Context;
-import core.EventSource;
-import core.EventSourceMultiplexer;
-import core.Initializer;
-import core.Time;
-import core.Time.Unit;
 
 /**
  * 

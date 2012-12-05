@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import manelsim.EventScheduler;
+import manelsim.Time;
 import simulation.beefs.event.filesystem.DeleteFileReplicas;
 import simulation.beefs.event.filesystem.UpdateFileReplicas;
 import simulation.beefs.placement.DataPlacementAlgorithm;
-import core.EventScheduler;
-import core.Time;
 
 /**
  * @author Patrick Maia
