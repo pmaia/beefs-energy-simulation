@@ -42,7 +42,7 @@ public class Conservative implements EnergyConsumptionModel {
 			}
 		}
 
-		long energyConsumption = sleepingTime.asHours() * SLEEPING_CONSUMPTION;
+		double energyConsumption = sleepingTime.asHours() * SLEEPING_CONSUMPTION;
 		energyConsumption += peakTime.asHours() * PEAK_CONSUMPTION;
 		energyConsumption += moderateUsageTime.asHours() * MODERATE_USAGE;
 				

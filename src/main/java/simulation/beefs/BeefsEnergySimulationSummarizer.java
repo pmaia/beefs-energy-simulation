@@ -124,8 +124,9 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 			}
 		}
 		
-		if(energyStateInterval != null) {
+		while(energyStateInterval != null) {
 			combinedStates.add(energyStateInterval);
+			energyStateInterval = getNext(partiallyCombinedIntervalsIterator);
 		}
 		
 		return combinedStates;

@@ -18,4 +18,9 @@ public class EnergyStateInterval {
 	public TimeInterval getInterval() {
 		return interval;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("<%s - %s>", state, interval);
+	}
 }
