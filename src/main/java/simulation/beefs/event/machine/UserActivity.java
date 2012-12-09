@@ -29,4 +29,8 @@ public class UserActivity extends MachineDelaybleEvent {
 		host.setActive(getScheduledTime(), duration);
 	}
 
+	@Override
+	public String toString() {
+		return String.format("activity\t%s\t%s", getScheduledTime(), duration);
+	}
 }

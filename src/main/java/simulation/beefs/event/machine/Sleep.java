@@ -26,4 +26,8 @@ public class Sleep extends Event {
 		machine.setSleeping(getScheduledTime(), duration);
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("sleep\t%s\t%s", getScheduledTime(), duration);
+	}
 }
