@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import manelsim.EventScheduler;
@@ -61,12 +60,12 @@ public class WriteTest {
 		
 		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
 		DataServer ds = file.getPrimary();
-		List<TimeInterval> writeIntervals = ds.getWriteIntervals();
+		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
 		
 		assertEquals(1024L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
 		assertEquals(1, writeIntervals.size());
-		assertEquals(new TimeInterval(eventStart, eventStart.plus(duration)), writeIntervals.get(0));
+		assertEquals(new TimeInterval(eventStart, eventStart.plus(duration)), writeIntervals.iterator().next());
 	}
 	
 	@Test
@@ -84,7 +83,7 @@ public class WriteTest {
 		
 		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
 		DataServer ds = file.getPrimary();
-		List<TimeInterval> writeIntervals = ds.getWriteIntervals();
+		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
 		
 		assertEquals(1024L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
@@ -110,7 +109,7 @@ public class WriteTest {
 		
 		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
 		DataServer ds = file.getPrimary();
-		List<TimeInterval> writeIntervals = ds.getWriteIntervals();
+		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
 		
 		assertEquals(1024L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
@@ -137,7 +136,7 @@ public class WriteTest {
 		write.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
+		Set<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
 		
 		assertEquals(1024L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
@@ -162,7 +161,7 @@ public class WriteTest {
 		write.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
+		Set<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
 		
 		assertEquals(2048L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
@@ -219,7 +218,7 @@ public class WriteTest {
 		TimeInterval expectedInterval = new TimeInterval(theTimeJurupocaMustWakeUp.plus(ONE_SECOND), 
 				theTimeJurupocaMustWakeUp.plus(ONE_SECOND).plus(writeDuration));
 		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(expectedInterval, file.getPrimary().getWriteIntervals().get(0));
+		assertEquals(expectedInterval, file.getPrimary().getWriteIntervals().iterator().next());
 		
 		assertEquals(0, client.writesWhileClientSleeping());
 	}

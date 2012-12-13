@@ -1,7 +1,10 @@
 package simulation.beefs.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 import manelsim.Time;
 import manelsim.TimeInterval;
@@ -15,19 +18,19 @@ public class DataServer {
 	
 	private final Machine host;
 
-	private List<TimeInterval> writeIntervals = new ArrayList<TimeInterval>();
-	private List<TimeInterval> readIntervals = new ArrayList<TimeInterval>();
+	private TreeSet<TimeInterval> writeIntervals = new TreeSet<TimeInterval>(new TimeIntervalComparator());
+	private TreeSet<TimeInterval> readIntervals = new TreeSet<TimeInterval>(new TimeIntervalComparator());
 	
 	public DataServer(Machine host) {
 		this.host = host;
 	}
 
-	public List<TimeInterval> getWriteIntervals() {
-		return new ArrayList<TimeInterval>(writeIntervals);
+	public Set<TimeInterval> getWriteIntervals() {
+		return combineIntervals(writeIntervals.iterator());
 	}
 	
-	public List<TimeInterval> getReadIntervals() {
-		return new ArrayList<TimeInterval>(readIntervals);
+	public Set<TimeInterval> getReadIntervals() {
+		return combineIntervals(readIntervals.iterator());
 	}
 
 	public Machine getHost() {
@@ -35,30 +38,38 @@ public class DataServer {
 	}
 
 	public void reportWrite(Time start, Time duration) {
-		writeIntervals = reportOperation(start, duration, writeIntervals);
+		writeIntervals.add(new TimeInterval(start, start.plus(duration)));
 	}
 
 	public void reportRead(Time start, Time duration) {
-		readIntervals = reportOperation(start, duration, readIntervals);
+		readIntervals.add(new TimeInterval(start, start.plus(duration)));
 	}
 	
-	private List<TimeInterval> reportOperation(Time start, Time duration, List<TimeInterval> originalIntervals) {
-		TimeInterval newInterval = new TimeInterval(start, start.plus(duration));
-
-		List<TimeInterval> updatedIntervalsList = new ArrayList<TimeInterval>();
-		updatedIntervalsList.add(newInterval);
-
-		for(TimeInterval interval : originalIntervals) {
-			if(interval.overlaps(newInterval)) {
-				updatedIntervalsList.remove(newInterval);
-				newInterval = interval.merge(newInterval);
-				updatedIntervalsList.add(newInterval);
+	private Set<TimeInterval> combineIntervals(Iterator<TimeInterval> intervals) {
+		Set<TimeInterval> resultSet = new HashSet<TimeInterval>();
+		
+		TimeInterval firstInterval = intervals.hasNext() ? intervals.next() : null;
+		while(firstInterval != null && intervals.hasNext()) {
+			TimeInterval secondInterval = intervals.next();
+			if(firstInterval.overlaps(secondInterval)) {
+				firstInterval = firstInterval.merge(secondInterval);
 			} else {
-				updatedIntervalsList.add(interval);
+				resultSet.add(firstInterval);
+				firstInterval = secondInterval;
 			}
 		}
-
-		return updatedIntervalsList;
+		if(firstInterval != null) {
+			resultSet.add(firstInterval);
+		}
+		
+		return resultSet;
 	}
-
+	
+	private static class TimeIntervalComparator implements Comparator<TimeInterval> {
+		@Override
+		public int compare(TimeInterval interval1, TimeInterval interval2) {
+			return interval1.begin().compareTo(interval2.begin());
+		}
+	}
+	
 }

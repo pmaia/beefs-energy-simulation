@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import manelsim.EventScheduler;
@@ -95,7 +94,7 @@ public class ReadTest {
 		read.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
+		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
 		
 		assertEquals(1, readIntervals.size());
 		TimeInterval expectedReadInterval = new TimeInterval(scheduledTime, scheduledTime.plus(duration));
@@ -115,7 +114,7 @@ public class ReadTest {
 		read2.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
+		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
 		
 		assertEquals(2, readIntervals.size());
 		TimeInterval expectedTimeInterval = new TimeInterval(read1Start, read1Start.plus(eventsDuration));
@@ -138,7 +137,7 @@ public class ReadTest {
 		read2.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
+		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
 		
 		assertEquals(1, readIntervals.size());
 		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, new Time(15, Unit.MILLISECONDS));
@@ -163,7 +162,7 @@ public class ReadTest {
 		read3.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		List<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
+		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
 		
 		assertEquals(2, readIntervals.size());
 		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, new Time(8, Unit.MILLISECONDS));
@@ -219,7 +218,7 @@ public class ReadTest {
 		TimeInterval expectedInterval = new TimeInterval(theTimeJurupocaMustWakeUp.plus(ONE_SECOND), 
 				theTimeJurupocaMustWakeUp.plus(ONE_SECOND).plus(readDuration));
 		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(expectedInterval, file.getPrimary().getReadIntervals().get(0));
+		assertEquals(expectedInterval, file.getPrimary().getReadIntervals().iterator().next());
 		
 		assertEquals(0, client.readsWhileClientSleeping());
 	}
