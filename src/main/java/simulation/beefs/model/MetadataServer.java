@@ -28,8 +28,10 @@ public class MetadataServer {
 	// Patrick: I'm considering that there is just one DataServer per machine.
 	private final Map<String, DataServer> dataServerByHost = new HashMap<String, DataServer>();
 
+	private final boolean wakeOnLan;
+
 	public MetadataServer(Set<DataServer> dataServers, String dataPlacementStrategy, 
-			int replicationLevel, Time timeToCoherence, Time timeToDelete) {
+			int replicationLevel, Time timeToCoherence, Time timeToDelete, boolean wakeOnLan) {
 		
 		for(DataServer dataServer : dataServers) {
 			dataServerByHost.put(dataServer.getHost().getName(), dataServer);
@@ -39,6 +41,7 @@ public class MetadataServer {
 		this.replicationLevel = replicationLevel;
 		this.timeToCoherence = timeToCoherence;
 		this.timeToDelete = timeToDelete;
+		this.wakeOnLan = wakeOnLan;
 	}
 	
 	public void close(String filePath) {
@@ -46,10 +49,25 @@ public class MetadataServer {
 		
 		if(file != null && !file.areReplicasConsistent() && file.getSecondaries().size() > 0) {
 			Time now = EventScheduler.now();
-			EventScheduler.schedule(new UpdateFileReplicas(now.plus(timeToCoherence), filePath));
+			EventScheduler.schedule(new UpdateFileReplicas(now.plus(timeToCoherence), file, this));
 		}
 	}
 	
+	public void updateReplicas(ReplicatedFile file) {
+		if(wakeOnLan) {
+			wakeUpIfSleeping(file.getPrimary().getHost());
+			for(DataServer replicaDataServer : file.getSecondaries()) {
+				wakeUpIfSleeping(replicaDataServer.getHost());
+			}
+		}
+	}
+	
+	private void wakeUpIfSleeping(Machine machine) {
+		if(!machine.isReachable()) {
+			machine.wakeOnLan(EventScheduler.now());
+		}
+	}
+
 	public void delete(String filePath) {
 		ReplicatedFile file = files.remove(filePath);
 		//FIXME Patrick: tenho que fazer aqui em file.getPrimary() o mesmo que eu fizer em DeleteFileReplicas.process()

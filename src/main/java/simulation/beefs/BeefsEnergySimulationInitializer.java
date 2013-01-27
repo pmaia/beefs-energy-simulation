@@ -72,11 +72,12 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_COHERENCE)), Unit.SECONDS);
 		Time timeToDelete = 
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
+		
+		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
 		MetadataServer metadataServer = 
-				new MetadataServer(dataServers, placementPoliceName, replicationLevel, timeToCoherence, timeToDelete); 
+				new MetadataServer(dataServers, placementPoliceName, replicationLevel, timeToCoherence, timeToDelete, wakeOnLan); 
 
 		// create clients
-		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
 		Set<FileSystemClient> clients = createClients(machines, metadataServer, wakeOnLan);
 		
 		// instantiate energy consumption model

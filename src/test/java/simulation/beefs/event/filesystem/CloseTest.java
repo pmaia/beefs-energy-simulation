@@ -47,8 +47,9 @@ public class CloseTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		boolean wakeOnLan = true;
+		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		client.createOrOpen(filePath);
 		
@@ -67,8 +68,9 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca));
 		dataServers.add(new DataServer(cherne));
 		dataServers.add(new DataServer(pepino));
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 2, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		boolean wakeOnLan = true;
+		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 2, timeToCoherence, timeToDelete, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		client.createOrOpen(filePath);
 		
@@ -87,13 +89,14 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca));
 		dataServers.add(new DataServer(cherne));
 		dataServers.add(new DataServer(pepino));
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 2, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		boolean wakeOnLan = true;
+		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 2, timeToCoherence, timeToDelete, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
 		file.setReplicasAreConsistent(false);
 		
-		eventSourceMock.addNewEvent(new UpdateFileReplicas(closeTime.plus(timeToCoherence), filePath));
+		eventSourceMock.addNewEvent(new UpdateFileReplicas(closeTime.plus(timeToCoherence), file, metadataServer));
 		replay(eventSourceMock);
 		
 		Close close = new Close(client, closeTime, filePath);
@@ -108,8 +111,9 @@ public class CloseTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		boolean wakeOnLan = true;
+		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		replay(eventSourceMock);
 		Close close = new Close(client, closeTime, filePath);

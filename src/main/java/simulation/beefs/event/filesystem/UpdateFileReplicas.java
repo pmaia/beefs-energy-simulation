@@ -2,47 +2,24 @@ package simulation.beefs.event.filesystem;
 
 import manelsim.Event;
 import manelsim.Time;
+import simulation.beefs.model.MetadataServer;
+import simulation.beefs.model.ReplicatedFile;
 
 public class UpdateFileReplicas extends Event {
 	
-	private String filePath;
+	private final ReplicatedFile file;
+	private final MetadataServer metadataServer;
 
-	public UpdateFileReplicas(Time scheduledTime, String filePath) {
+	public UpdateFileReplicas(Time scheduledTime, ReplicatedFile file, MetadataServer metadataServer) {
 		super(scheduledTime);
 		
-		this.filePath = filePath;
+		this.file = file;
+		this.metadataServer = metadataServer;
 	}
 
 	@Override
 	public void process() {
-		// TODO Auto-generated method stub
-
+		metadataServer.updateReplicas(file);
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((filePath == null) ? 0 : filePath.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UpdateFileReplicas other = (UpdateFileReplicas) obj;
-		if (filePath == null) {
-			if (other.filePath != null)
-				return false;
-		} else if (!filePath.equals(other.filePath))
-			return false;
-		return true;
-	}
-
+	
 }

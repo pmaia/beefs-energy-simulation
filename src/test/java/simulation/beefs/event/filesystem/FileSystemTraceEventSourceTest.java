@@ -39,8 +39,9 @@ public class FileSystemTraceEventSourceTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, Time.GENESIS, Time.GENESIS);
-		client = new FileSystemClient(jurupoca, metadataServer, true);
+		boolean wakeOnLan = true;
+		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, Time.GENESIS, Time.GENESIS, wakeOnLan);
+		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 	}
 
 	@Test

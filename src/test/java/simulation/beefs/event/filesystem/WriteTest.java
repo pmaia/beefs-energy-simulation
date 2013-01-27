@@ -45,8 +45,9 @@ public class WriteTest {
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete);
-		client = new FileSystemClient(jurupoca, metadataServer, true);		
+		boolean wakeOnLan = true;
+		metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);		
 	}
 	
 	@Test

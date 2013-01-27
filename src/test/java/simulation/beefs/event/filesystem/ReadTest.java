@@ -50,9 +50,10 @@ public class ReadTest {
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
-		metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete);
+		boolean wakeOnLan = true;
+		metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
 		
-		client = new FileSystemClient(jurupoca, metadataServer, true);
+		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 	}
 	
 	@Test
