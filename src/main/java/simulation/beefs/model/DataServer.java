@@ -38,11 +38,11 @@ public class DataServer {
 	}
 
 	public void reportWrite(Time start, Time duration) {
-		writeIntervals.add(new TimeInterval(start, start.plus(duration)));
+//		writeIntervals.add(new TimeInterval(start, start.plus(duration)));
 	}
 
 	public void reportRead(Time start, Time duration) {
-		readIntervals.add(new TimeInterval(start, start.plus(duration)));
+//		readIntervals.add(new TimeInterval(start, start.plus(duration)));
 	}
 	
 	private Set<TimeInterval> combineIntervals(Iterator<TimeInterval> intervals) {

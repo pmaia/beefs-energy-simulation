@@ -42,12 +42,12 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 				convertStates(dataServer.getHost().getStateIntervals());
 		
 		// combine writes
-		Iterator<TimeInterval> writesIterator = dataServer.getWriteIntervals().iterator();
-		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), writesIterator, false);
+//		Iterator<TimeInterval> writesIterator = dataServer.getWriteIntervals().iterator();
+//		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), writesIterator, false);
 
 		// combine reads 
-		Iterator<TimeInterval> readsIterator = dataServer.getReadIntervals().iterator();
-		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), readsIterator, true);
+//		Iterator<TimeInterval> readsIterator = dataServer.getReadIntervals().iterator();
+//		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), readsIterator, true);
 		
 		return combinedEnergyStatesIntervals;
 	}
