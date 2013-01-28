@@ -10,6 +10,7 @@ import manelsim.Time.Unit;
 import manelsim.TimeInterval;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import simulation.beefs.model.Machine.State;
@@ -33,6 +34,7 @@ public class MachineTransitionsFromBootstrapTest {
 		EventScheduler.setup(Time.GENESIS, Time.THE_FINAL_JUDGMENT, eventsMultiplexer);
 	}
 	
+	@Ignore
 	@Test(expected=IllegalStateException.class)
 	public void testTransitionFromBootstrapToActive() {
 		machine.setActive(Time.GENESIS, new Time(5, Unit.SECONDS));

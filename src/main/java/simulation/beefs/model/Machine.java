@@ -174,7 +174,7 @@ public class Machine {
 	private class Bootstrap implements MachineState {
 		@Override
 		public MachineState toActive(TimeInterval interval) {
-			throw new IllegalStateException("transition to IDLE is expected.");
+			return new Active(interval);
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
