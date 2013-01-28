@@ -14,6 +14,7 @@ import manelsim.Time.Unit;
 import manelsim.TimeInterval;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import simulation.beefs.event.machine.UserIdleness;
@@ -50,6 +51,7 @@ public class WriteTest {
 		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);		
 	}
 	
+	@Ignore
 	@Test
 	public void testWriteIntervalsAfterOneWrite() {
 		Time eventStart = Time.GENESIS;
@@ -69,6 +71,7 @@ public class WriteTest {
 		assertEquals(new TimeInterval(eventStart, eventStart.plus(duration)), writeIntervals.iterator().next());
 	}
 	
+	@Ignore
 	@Test
 	public void testWriteIntervalsAfterNonOverlappedWrites() {
 		Time event1Start = Time.GENESIS;
@@ -95,6 +98,7 @@ public class WriteTest {
 		assertTrue(writeIntervals.contains(expectedTimeInterval));
 	}
 	
+	@Ignore
 	@Test
 	public void testWriteIntervalsAfterOverlappedWrites() {
 		Time event1Start = Time.GENESIS;
@@ -119,6 +123,7 @@ public class WriteTest {
 		assertTrue(writeIntervals.contains(expectedTimeInterval));
 	}
 	
+	@Ignore
 	@Test
 	public void testWriteIntervalsAfterOverlappedAndNonOverlappedWrites() {
 		String filePath = "/home/patrick/teste.txt";
@@ -148,6 +153,7 @@ public class WriteTest {
 		assertTrue(writeIntervals.contains(expectedTimeInterval));
 	}
 	
+	@Ignore
 	@Test
 	public void testWritesChangingFileSize() {
 		String filePath = "/home/patrick/teste.txt";
@@ -175,6 +181,7 @@ public class WriteTest {
 	 * If client and data server are in different machine, the target machine is sleeping and client is configured to 
 	 * use wakeOnLan...
 	 */
+	@Ignore
 	@Test
 	public void testWriteIsProperlyReScheduled() { 
 		String fullpath = "/home/beefs/arquivo.txt";
