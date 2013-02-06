@@ -33,4 +33,8 @@ public class UserActivity extends MachineDelaybleEvent {
 	public String toString() {
 		return String.format("activity\t%s\t%s", getScheduledTime(), duration);
 	}
+	
+	public Time getDuration() {
+		return this.duration;
+	}
 }

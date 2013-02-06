@@ -31,5 +31,9 @@ public class UserIdleness extends MachineDelaybleEvent {
 	public void process() {
 		machine.setIdle(getScheduledTime(), duration);
 	}
+	
+	public Time getDuration() {
+		return this.duration;
+	}
 
 }
