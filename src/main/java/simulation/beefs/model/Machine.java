@@ -148,7 +148,8 @@ public class Machine {
 		TimeInterval last = stateIntervals.get(stateIntervals.size() - 1).getInterval();
 		if(!last.isContiguous(next)) {
 			String msg = String.format("The interval duration of the next state must be contiguous to the " +
-					"interval duration of the current state. Current interval is %s. You tried this %s.", last, next);
+					"interval duration of the current state. Current interval is %s. You tried this %s." +
+					"Machine: %s. Current delay %s", last, next, hostname, currentDelay);
 			throw new IllegalArgumentException(msg);
 		}
 	}
