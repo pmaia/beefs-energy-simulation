@@ -31,21 +31,20 @@ public class UserActivityTraceEventSource implements EventSource {
 	
 	private final Machine machine;
 	private final BufferedReader eventReader;
-	private Event firstEvent;
 	
 	public UserActivityTraceEventSource(Machine machine, InputStream eventStream) {
 		this.machine = machine;
 		this.eventReader = new BufferedReader(new InputStreamReader(eventStream));
-		this.firstEvent = advanceToSimulationStart();
 	}
 
+	private boolean firstCall = true;
 	@Override
 	public Event getNextEvent() {
 		Event event = null;
 		
-		if(firstEvent != null) {
-			event = firstEvent;
-			firstEvent = null;
+		if(firstCall) { //arghhh
+			event = advanceToSimulationStart();
+			firstCall = false;
 		} else {
 			try {
 				String traceLine = eventReader.readLine();
