@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 import manelsim.Event;
-import manelsim.EventScheduler;
 import manelsim.EventSource;
 import manelsim.Time;
 import manelsim.Time.Unit;
@@ -33,10 +32,10 @@ public class UserActivityTraceEventSource implements EventSource {
 	private final BufferedReader eventReader;
 	private Event firstEvent;
 	
-	public UserActivityTraceEventSource(Machine machine, InputStream eventStream) {
+	public UserActivityTraceEventSource(Machine machine, InputStream eventStream, Time emulationStartTime) {
 		this.machine = machine;
 		this.eventReader = new BufferedReader(new InputStreamReader(eventStream));
-		this.firstEvent = advanceToSimulationStart();
+		this.firstEvent = advanceToSimulationStart(emulationStartTime);
 	}
 
 	@Override
@@ -81,10 +80,9 @@ public class UserActivityTraceEventSource implements EventSource {
 	/**
 	 * Advances this EventSource to the interval that contains the simulation start time. That interval start becomes
 	 * the simulation start time and the duration is adjusted accordingly
+	 * @param emulationStartTime 
 	 */
-	private Event advanceToSimulationStart() {
-		Time emulationStartTime = EventScheduler.getEmulationStart();
-		
+	private Event advanceToSimulationStart(Time emulationStartTime) {
 		Event event;
 		Time duration;
 		do {

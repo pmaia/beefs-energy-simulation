@@ -16,6 +16,7 @@ public class BeefsEnergySimulationConstants {
 	public static final String TIME_TO_DELETE_REPLICAS  = "time_to_delete_replicas";
 	public static final String WAKE_ON_LAN = "wake_on_lan";
 	public static final String TRANSITION_DURATION = "transition_duration";
+	public static final String EMULATION_START_TIME = "simulation_start";
 	
 	// Context keys
 	public static final String MACHINES = "machines";

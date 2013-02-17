@@ -92,8 +92,10 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		}
 		
 		// setup context
+		Time emulationStartTime = 
+			new Time(Long.parseLong(config.getProperty(BeefsEnergySimulationConstants.EMULATION_START_TIME)), Unit.SECONDS);
 		EventSourceMultiplexer eventSourceMultiplexer = 
-				createEventSourceMultiplexer(clients, machines, tracesDir);
+				createEventSourceMultiplexer(clients, machines, emulationStartTime, tracesDir);
 		
 		Context context = new Context(eventSourceMultiplexer);
 		context.add(BeefsEnergySimulationConstants.MACHINES, machines);
@@ -106,7 +108,7 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 	}
 
 	private EventSourceMultiplexer createEventSourceMultiplexer(Set<FileSystemClient> clients, 
-			Set<Machine> machines, File tracesDir) {
+			Set<Machine> machines, Time emulationStartTime, File tracesDir) {
 	
 		EventSource []  parsers = new EventSource[machines.size() + clients.size()];
 	
@@ -116,7 +118,7 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 			for(Machine machine : machines) {
 				traceStream = 
 					new FileInputStream(new File(tracesDir, "idleness-" + machine.getName()));
-				parsers[parserCount++] = new UserActivityTraceEventSource(machine, traceStream);
+				parsers[parserCount++] = new UserActivityTraceEventSource(machine, traceStream, emulationStartTime);
 			}
 			for(FileSystemClient client : clients) {
 				traceStream = 
