@@ -53,9 +53,7 @@ public class FileSystemClient {
 			ReplicatedFile file = createOrOpen(filePath);
 		
 			DataServer primary = file.getPrimary();
-			if(primary.getHost().isReachable()) {
-				primary.reportRead(begin, duration);
-			} else if(wakeOnLan){
+			if(!primary.getHost().isReachable() && wakeOnLan){
 				primary.getHost().wakeOnLan(begin);
 				
 				Time delta = primary.getHost().getTransitionDuration().plus(ONE_SECOND);
@@ -77,8 +75,6 @@ public class FileSystemClient {
 			if(primary.getHost().isReachable()) {
 				replicatedFile.setSize(fileSize);
 				replicatedFile.setReplicasAreConsistent(false);
-
-				primary.reportWrite(begin, duration);
 			} else if(wakeOnLan) {
 				primary.getHost().wakeOnLan(begin);
 				

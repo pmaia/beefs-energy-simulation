@@ -10,10 +10,8 @@ import manelsim.EventScheduler;
 import manelsim.EventSource;
 import manelsim.Time;
 import manelsim.Time.Unit;
-import manelsim.TimeInterval;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import simulation.beefs.event.machine.UserIdleness;
@@ -85,103 +83,10 @@ public class ReadTest {
 		assertEquals(false, file.areReplicasConsistent());
 	}
 	
-	@Ignore
-	@Test
-	public void testReadIntervalsAfterOneRead() {
-		Time scheduledTime = Time.GENESIS;
-		Time duration = new Time(5, Unit.MILLISECONDS);
-		String filePath = "/home/patrick/teste.txt";
-		long length = 1024;
-		
-		Read read = new Read(client, scheduledTime, duration, filePath, length);
-		read.process();
-		
-		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
-		
-		assertEquals(1, readIntervals.size());
-		TimeInterval expectedReadInterval = new TimeInterval(scheduledTime, scheduledTime.plus(duration));
-		assertTrue(readIntervals.contains(expectedReadInterval));
-	}
-	
-	@Ignore
-	@Test
-	public void testReadIntervalsAfterNonOverlappedReads() {
-		String filePath = "/home/patrick/cruzeiro.txt";
-		Time read1Start = Time.GENESIS;
-		Time read2Start = new Time(6, Unit.MILLISECONDS);
-		Time eventsDuration = new Time(5, Unit.MILLISECONDS);
-		
-		Read read1 = new Read(client, read1Start, eventsDuration, filePath, 64);
-		read1.process();
-		Read read2 = new Read(client, read2Start, eventsDuration, filePath, 1024);
-		read2.process();
-		
-		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
-		
-		assertEquals(2, readIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(read1Start, read1Start.plus(eventsDuration));
-		assertTrue(readIntervals.contains(expectedTimeInterval));
-		expectedTimeInterval = new TimeInterval(read2Start, read2Start.plus(eventsDuration));
-		assertTrue(readIntervals.contains(expectedTimeInterval));
-	}
-	
-	@Ignore
-	@Test
-	public void testReadIntervalsAfterOverlapperdReads() {
-		String filePath = "/home/patrick/cruzeiro.txt";
-		Time read1Start = Time.GENESIS;
-		Time read2Start = new Time(5, Unit.MILLISECONDS);
-		Time duration = new Time(10, Unit.MILLISECONDS);
-		
-		Read read1 = new Read(client, read1Start, duration, filePath, 1024);
-		read1.process();
-		
-		Read read2 = new Read(client, read2Start, duration, filePath, 1024);
-		read2.process();
-		
-		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
-		
-		assertEquals(1, readIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, new Time(15, Unit.MILLISECONDS));
-		assertTrue(readIntervals.contains(expectedTimeInterval));
-	}
-	
-	@Ignore
-	@Test
-	public void testReadIntervalsAfterOverlappedAndNonOverlappedReads() {
-		String filePath = "/home/patrick/cruzeiro.txt";
-		Time read1Start = Time.GENESIS;
-		Time read2Start = new Time(3, Unit.MILLISECONDS);
-		Time read3Start = new Time(10, Unit.MILLISECONDS);
-		Time duration = new Time(5, Unit.MILLISECONDS);
-		
-		Read read1 = new Read(client, read1Start, duration, filePath, 1024);
-		read1.process();
-		
-		Read read2 = new Read(client, read2Start, duration, filePath, 1024);
-		read2.process();
-		
-		Read read3 = new Read(client, read3Start, duration, filePath, 1024);
-		read3.process();
-		
-		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> readIntervals = file.getPrimary().getReadIntervals();
-		
-		assertEquals(2, readIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, new Time(8, Unit.MILLISECONDS));
-		assertTrue(readIntervals.contains(expectedTimeInterval));
-		expectedTimeInterval = new TimeInterval(read3Start, read3Start.plus(duration));
-		assertTrue(readIntervals.contains(expectedTimeInterval));
-	}
-	
 	/*
 	 * If client and data server are in different machine, the target machine is sleeping and client is configured to 
 	 * use wakeOnLan...
 	 */
-	@Ignore
 	@Test
 	public void testReadIsProperlyReScheduled() { 
 		String fullpath = "/home/beefs/arquivo.txt";
@@ -222,11 +127,6 @@ public class ReadTest {
 		
 		EventScheduler.start(); // consumes the UserIdleness scheduled by the call to wakeOnLan
 		assertEquals(State.IDLE, jurupoca.getState());
-		TimeInterval expectedInterval = new TimeInterval(theTimeJurupocaMustWakeUp.plus(ONE_SECOND), 
-				theTimeJurupocaMustWakeUp.plus(ONE_SECOND).plus(readDuration));
-		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(expectedInterval, file.getPrimary().getReadIntervals().iterator().next());
-		
 		assertEquals(0, client.readsWhileClientSleeping());
 	}
 	
@@ -265,10 +165,6 @@ public class ReadTest {
 		assertEquals(State.SLEEPING, jurupoca.getState());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
-		// zero read intervals must be added
-		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(0, file.getPrimary().getReadIntervals().size());
-		
 		assertEquals(1, otherClient.readsWhileDataServerSleeping());
 	}
 	
@@ -300,10 +196,6 @@ public class ReadTest {
 		// the status must not change
 		assertEquals(State.SLEEPING, jurupoca.getState());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
-		
-		// zero read intervals must be added
-		ReplicatedFile file = client.createOrOpen(fullpath);
-		assertEquals(0, file.getPrimary().getReadIntervals().size());
 		
 		assertEquals(1, client.readsWhileClientSleeping());
 	}

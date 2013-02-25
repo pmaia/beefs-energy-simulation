@@ -11,10 +11,8 @@ import manelsim.EventScheduler;
 import manelsim.EventSource;
 import manelsim.Time;
 import manelsim.Time.Unit;
-import manelsim.TimeInterval;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import simulation.beefs.event.machine.UserIdleness;
@@ -51,115 +49,11 @@ public class WriteTest {
 		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);		
 	}
 	
-	@Ignore
-	@Test
-	public void testWriteIntervalsAfterOneWrite() {
-		Time eventStart = Time.GENESIS;
-		Time duration = new Time(3, Unit.MILLISECONDS);
-		Write write = 
-				new Write(client, eventStart, duration, "/home/josebiades/texto.txt", 15 , 1024);
-		
-		write.process();
-		
-		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
-		DataServer ds = file.getPrimary();
-		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
-		
-		assertEquals(1024L, file.getSize());
-		assertFalse(file.areReplicasConsistent());
-		assertEquals(1, writeIntervals.size());
-		assertEquals(new TimeInterval(eventStart, eventStart.plus(duration)), writeIntervals.iterator().next());
-	}
-	
-	@Ignore
-	@Test
-	public void testWriteIntervalsAfterNonOverlappedWrites() {
-		Time event1Start = Time.GENESIS;
-		Time event1Duration = new Time(5, Unit.MILLISECONDS);
-		Write write = 
-				new Write(client, event1Start, event1Duration, "/home/josebiades/texto.txt", 15 , 1024);
-		write.process();
-		
-		Time event2Start = new Time(6, Unit.MILLISECONDS);
-		Time event2Duration = new Time(5, Unit.MILLISECONDS);
-		write =	new Write(client, event2Start, event2Duration, "/home/josebiades/texto.txt", 15 , 1024);
-		write.process();
-		
-		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
-		DataServer ds = file.getPrimary();
-		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
-		
-		assertEquals(1024L, file.getSize());
-		assertFalse(file.areReplicasConsistent());
-		assertEquals(2, writeIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(event1Start, event1Start.plus(event1Duration));
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
-		expectedTimeInterval = new TimeInterval(event2Start, event2Start.plus(event2Duration));
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
-	}
-	
-	@Ignore
-	@Test
-	public void testWriteIntervalsAfterOverlappedWrites() {
-		Time event1Start = Time.GENESIS;
-		Time event1Duration = new Time(5, Unit.MILLISECONDS);
-		Write write = 
-				new Write(client, event1Start, event1Duration, "/home/josebiades/texto.txt", 15 , 1024);
-		write.process();
-		
-		Time event2Start = new Time(2, Unit.MILLISECONDS);
-		Time event2Duration = new Time(5, Unit.MILLISECONDS);
-		write =	new Write(client, event2Start, event2Duration, "/home/josebiades/texto.txt", 15 , 1024);
-		write.process();
-		
-		ReplicatedFile file = client.createOrOpen("/home/josebiades/texto.txt");
-		DataServer ds = file.getPrimary();
-		Set<TimeInterval> writeIntervals = ds.getWriteIntervals();
-		
-		assertEquals(1024L, file.getSize());
-		assertFalse(file.areReplicasConsistent());
-		assertEquals(1, writeIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, event2Start.plus(event2Duration));
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
-	}
-	
-	@Ignore
-	@Test
-	public void testWriteIntervalsAfterOverlappedAndNonOverlappedWrites() {
-		String filePath = "/home/patrick/teste.txt";
-		Time zero = Time.GENESIS;
-		Time five = new Time(5, Unit.MILLISECONDS);
-		Time ten = new Time(10, Unit.MILLISECONDS);
-		Time fifteen = new Time(15, Unit.MILLISECONDS);
-		
-		Write write = new Write(client, zero, five, filePath, 15, 1024);
-		write.process();
-		
-		write = new Write(client, ten, five, filePath, 15, 1024);
-		write.process();
-		
-		write = new Write(client, zero, five, filePath, 15, 1024);
-		write.process();
-		
-		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
-		
-		assertEquals(1024L, file.getSize());
-		assertFalse(file.areReplicasConsistent());
-		assertEquals(2, writeIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, five);
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
-		expectedTimeInterval = new TimeInterval(ten, fifteen);
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
-	}
-	
-	@Ignore
 	@Test
 	public void testWritesChangingFileSize() {
 		String filePath = "/home/patrick/teste.txt";
 		Time zero = Time.GENESIS;
 		Time five = new Time(5, Unit.MILLISECONDS);
-		Time ten = new Time(10, Unit.MILLISECONDS);
 
 		Write write = new Write(client, zero, five, filePath, 15, 1024);
 		write.process();
@@ -168,20 +62,15 @@ public class WriteTest {
 		write.process();
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		Set<TimeInterval> writeIntervals = file.getPrimary().getWriteIntervals();
-		
+
 		assertEquals(2048L, file.getSize());
 		assertFalse(file.areReplicasConsistent());
-		assertEquals(1, writeIntervals.size());
-		TimeInterval expectedTimeInterval = new TimeInterval(Time.GENESIS, ten);
-		assertTrue(writeIntervals.contains(expectedTimeInterval));
 	}
 	
 	/*
 	 * If client and data server are in different machine, the target machine is sleeping and client is configured to 
 	 * use wakeOnLan...
 	 */
-	@Ignore
 	@Test
 	public void testWriteIsProperlyReScheduled() { 
 		String fullpath = "/home/beefs/arquivo.txt";
@@ -223,10 +112,6 @@ public class WriteTest {
 		
 		EventScheduler.start(); // consumes the UserIdleness scheduled by the call to wakeOnLan
 		assertEquals(State.IDLE, jurupoca.getState());
-		TimeInterval expectedInterval = new TimeInterval(theTimeJurupocaMustWakeUp.plus(ONE_SECOND), 
-				theTimeJurupocaMustWakeUp.plus(ONE_SECOND).plus(writeDuration));
-		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(expectedInterval, file.getPrimary().getWriteIntervals().iterator().next());
 		
 		assertEquals(0, client.writesWhileClientSleeping());
 	}
@@ -266,10 +151,6 @@ public class WriteTest {
 		assertEquals(State.SLEEPING, jurupoca.getState());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
-		// zero write intervals must be added
-		ReplicatedFile file = otherClient.createOrOpen(fullpath);
-		assertEquals(0, file.getPrimary().getWriteIntervals().size());
-		
 		assertEquals(1, otherClient.writesWhileDataServerSleeping());
 	}
 	
@@ -301,10 +182,6 @@ public class WriteTest {
 		// the status must not change
 		assertEquals(State.SLEEPING, jurupoca.getState());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
-		
-		// zero write intervals must be added
-		ReplicatedFile file = client.createOrOpen(fullpath);
-		assertEquals(0, file.getPrimary().getWriteIntervals().size());
 		
 		assertEquals(1, client.writesWhileClientSleeping());
 	}
