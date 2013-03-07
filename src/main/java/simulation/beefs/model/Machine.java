@@ -290,31 +290,32 @@ public class Machine {
 			throw new IllegalStateException("Transition to ACTIVE or WakeOnLan are expected.");
 		}
 		@Override
-		public MachineState wakeOnLan(Time when) {
+		public MachineState wakeOnLan(Time now) {
 			/*
 			 *  adjusts the time interval the machine really slept
 			 */
 			int lastElementIndex = stateIntervals.size() - 1;
 			TimeInterval shouldSleepInterval = stateIntervals.get(lastElementIndex).getInterval();
-			if(shouldSleepInterval.end().isEarlierThan(when)) {
+			if(shouldSleepInterval.end().isEarlierThan(now)) {
 				throw new IllegalStateException("This machine should already be awake.");
 			}
 			stateIntervals.remove(lastElementIndex);
-			TimeInterval interval = new TimeInterval(shouldSleepInterval.begin(), when);
+			TimeInterval interval = new TimeInterval(shouldSleepInterval.begin(), now);
 			stateIntervals.add(new MachineStateInterval(State.SLEEPING, interval));
 
-			Time idlenessDuration = Time.max(shouldSleepInterval.end().minus(when).minus(transitionDuration), 
+			Time remainingSleepTime = shouldSleepInterval.end().minus(now);
+			Time idlenessDuration = Time.max(remainingSleepTime.minus(transitionDuration), 
 					Time.GENESIS);
 			
 			if(idlenessDuration.equals(Time.GENESIS)) {
-				return new WakingUp(when, false);
+				return new WakingUp(now, false);
 			} else {
 				/* 
 				 * schedules a new UserIdleness event starting after the transition ends and lasting the same time this 
 				 * machine should remain sleeping (before being disturbed) minus the transition duration.
 				 */
-				scheduleUserIdleness(when.plus(transitionDuration), idlenessDuration);
-				return new WakingUp(when, true);
+				scheduleUserIdleness(now.plus(transitionDuration), idlenessDuration);
+				return new WakingUp(now, true);
 			}
 		}
 		@Override
@@ -377,12 +378,12 @@ public class Machine {
 		private final TimeInterval transitionInterval;
 		private final boolean expectTransitionToIdle;
 		
+		private Time delayIncrement = transitionDuration;
 		private boolean neverEnteredHereBefore = true;
 				
 		public WakingUp(Time time, boolean expectTransitionToIdle) {
 			transitionInterval = new TimeInterval(time, time.plus(transitionDuration));
 			stateIntervals.add(new MachineStateInterval(State.WAKING_UP, transitionInterval));
-			currentDelay = currentDelay.plus(transitionDuration);
 			this.expectTransitionToIdle = expectTransitionToIdle;
 		}
 		@Override
@@ -399,13 +400,12 @@ public class Machine {
 							" This was expected by the end of the current transition.");
 				}
 				scheduleUserActivity(transitionInterval.end(), interval.delta());
-				// adjusts the machine delay caused by this transition
-				currentDelay = 
-					currentDelay.minus(transitionDuration).plus(transitionInterval.end().minus(interval.begin()));
+				delayIncrement = transitionInterval.end().minus(interval.begin());
 				neverEnteredHereBefore = false;
 				return this;
 			} else {
 				checkContinuity(interval);
+				currentDelay = currentDelay.plus(delayIncrement);
 				return new Active(interval);
 			}
 		}
