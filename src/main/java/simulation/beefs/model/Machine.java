@@ -148,10 +148,14 @@ public class Machine {
 		TimeInterval last = stateIntervals.get(stateIntervals.size() - 1).getInterval();
 		if(!last.isContiguous(next)) {
 			String msg = String.format("The interval duration of the next state must be contiguous to the " +
-					"interval duration of the current state. Current interval is %s. You tried this %s." +
-					"Machine: %s. Current delay %s", last, next, hostname, currentDelay);
+					"interval duration of the current state. Current interval is %s. You tried this %s. %s", 
+					last, next, machineInformation());
 			throw new IllegalArgumentException(msg);
 		}
+	}
+	
+	private String machineInformation() {
+		return String.format("Machine: %s. Current delay %s", hostname, currentDelay);
 	}
 	
 	// the next four methods are used by State implementations to schedule new events
@@ -183,11 +187,11 @@ public class Machine {
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
-			throw new IllegalStateException("transition to IDLE is expected.");
+			throw new IllegalStateException("transition to IDLE is expected. " + machineInformation());
 		}
 		@Override
 		public MachineState wakeOnLan(Time when) {
-			throw new IllegalStateException("transition to IDLE is expected.");
+			throw new IllegalStateException("transition to IDLE is expected. " + machineInformation());
 		}
 		@Override
 		public State state() {
@@ -211,19 +215,19 @@ public class Machine {
 		@Override
 		public MachineState toActive(TimeInterval interval) {
 			if(sleepIsExpected) {
-				throw new IllegalStateException("transition to SLEEP is expected.");
+				throw new IllegalStateException("transition to SLEEP is expected. " + machineInformation());
 			}
 			checkContinuity(interval); 
 			return new Active(interval);
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
-			throw new IllegalStateException("This machine is already IDLE.");
+			throw new IllegalStateException("This machine is already IDLE. " + machineInformation());
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
 			if(!sleepIsExpected) {
-				throw new IllegalStateException("transition to ACTIVE is expected");
+				throw new IllegalStateException("transition to ACTIVE is expected " + machineInformation());
 			}
 			checkContinuity(interval);
 			
@@ -234,7 +238,7 @@ public class Machine {
 		}
 		@Override
 		public MachineState wakeOnLan(Time when) {
-			throw new IllegalStateException("This machine is not sleeping.");
+			throw new IllegalStateException("This machine is not sleeping. " + machineInformation());
 		}
 		@Override
 		public State state() {
@@ -248,7 +252,7 @@ public class Machine {
 		}
 		@Override
 		public MachineState toActive(TimeInterval interval) {
-			throw new IllegalStateException("This machine is already ACTIVE.");
+			throw new IllegalStateException("This machine is already ACTIVE. " + machineInformation());
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
@@ -257,11 +261,11 @@ public class Machine {
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
-			throw new IllegalStateException("Transition to IDLE is expected.");
+			throw new IllegalStateException("Transition to IDLE is expected. " + machineInformation());
 		}
 		@Override
 		public MachineState wakeOnLan(Time when) {
-			throw new IllegalStateException("This machine is not sleeping.");
+			throw new IllegalStateException("This machine is not sleeping. " + machineInformation());
 		}
 		@Override
 		public State state() {
@@ -283,11 +287,11 @@ public class Machine {
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
-			throw new IllegalStateException("Transition to ACTIVE or WakeOnLan are expected.");
+			throw new IllegalStateException("Transition to ACTIVE or WakeOnLan are expected. " + machineInformation());
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
-			throw new IllegalStateException("Transition to ACTIVE or WakeOnLan are expected.");
+			throw new IllegalStateException("Transition to ACTIVE or WakeOnLan are expected. " + machineInformation());
 		}
 		@Override
 		public MachineState wakeOnLan(Time now) {
@@ -297,7 +301,7 @@ public class Machine {
 			int lastElementIndex = stateIntervals.size() - 1;
 			TimeInterval shouldSleepInterval = stateIntervals.get(lastElementIndex).getInterval();
 			if(shouldSleepInterval.end().isEarlierThan(now)) {
-				throw new IllegalStateException("This machine should already be awake.");
+				throw new IllegalStateException("This machine should already be awake. " + machineInformation());
 			}
 			stateIntervals.remove(lastElementIndex);
 			TimeInterval interval = new TimeInterval(shouldSleepInterval.begin(), now);
@@ -338,11 +342,11 @@ public class Machine {
 		@Override
 		public MachineState toActive(TimeInterval interval) {
 			if(!transitionToActiveMayOccur) {
-				throw new IllegalStateException("Transition to ACTIVE already occured.");
+				throw new IllegalStateException("Transition to ACTIVE already occured. " + machineInformation());
 			}
 			if(!interval.begin().isEarlierThan(transitionEnd) || 
 					interval.begin().isEarlierThan(transitionEnd.minus(transitionDuration))) {
-				throw new IllegalArgumentException("I could accept this transition at another time.");
+				throw new IllegalArgumentException("I could accept this transition at another time. " + machineInformation());
 			}
 			currentDelay = currentDelay.plus(transitionEnd.minus(interval.begin()));
 			scheduleUserActivity(transitionEnd, interval.delta());
@@ -352,7 +356,7 @@ public class Machine {
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
-			throw new IllegalStateException("Transition to ACTIVE, WakeOnLan or SLEEPING are expected.");
+			throw new IllegalStateException("Transition to ACTIVE, WakeOnLan or SLEEPING are expected. " + machineInformation());
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
@@ -389,7 +393,7 @@ public class Machine {
 		@Override
 		public MachineState toActive(TimeInterval interval) {
 			if(expectTransitionToIdle) {
-				throw new IllegalStateException("Transition to IDLE is expected.");
+				throw new IllegalStateException("Transition to IDLE is expected. " + machineInformation());
 			}
 			
 			if(interval.begin().compareTo(transitionInterval.begin()) >= 0 &&
@@ -397,7 +401,7 @@ public class Machine {
 			
 				if(!neverEnteredHereBefore) {
 					throw new IllegalStateException("Right call, wrong time." +
-							" This was expected by the end of the current transition.");
+							" This was expected by the end of the current transition. " + machineInformation());
 				}
 				scheduleUserActivity(transitionInterval.end(), interval.delta());
 				delayIncrement = transitionInterval.end().minus(interval.begin());
@@ -412,7 +416,7 @@ public class Machine {
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
 			if(!expectTransitionToIdle) {
-				throw new IllegalStateException("Transition to ACTIVE is expected.");
+				throw new IllegalStateException("Transition to ACTIVE is expected. " + machineInformation());
 			}
 			checkContinuity(interval);
 			return new Idle(interval);
@@ -420,7 +424,7 @@ public class Machine {
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
 			String nextState = expectTransitionToIdle ? "IDLE" : "ACTIVE";
-			throw new IllegalStateException(String.format("Transition to %s is expected.", nextState));
+			throw new IllegalStateException(String.format("Transition to %s is expected. " + machineInformation(), nextState));
 		}
 		@Override
 		public MachineState wakeOnLan(Time when) {
