@@ -234,7 +234,9 @@ public class Machine {
 			Time sleepDuration =  Time.max(interval.delta().minus(transitionDuration), Time.GENESIS);
 			scheduleSleep(interval.begin().plus(transitionDuration), sleepDuration);
 			
-			return new GoingSleep(interval.begin());
+			Time delayIncrement = Time.max(transitionDuration.minus(interval.delta()), Time.GENESIS); 
+			
+			return new GoingSleep(interval.begin(), delayIncrement);
 		}
 		@Override
 		public MachineState wakeOnLan(Time when) {
@@ -331,32 +333,22 @@ public class Machine {
 	private class GoingSleep implements MachineState {
 		
 		private final Time transitionEnd;
-		private boolean transitionToActiveMayOccur = true;
 		private boolean wakeOnLanScheduled = false;
 		
-		public GoingSleep(Time time) {
+		public GoingSleep(Time time, Time delayIncrement) {
 			TimeInterval interval = new TimeInterval(time, time.plus(transitionDuration));
 			stateIntervals.add(new MachineStateInterval(State.GOING_SLEEP, interval));
 			transitionEnd = interval.end();
+			
+			currentDelay = currentDelay.plus(delayIncrement);
 		}
 		@Override
 		public MachineState toActive(TimeInterval interval) {
-			if(!transitionToActiveMayOccur) {
-				throw new IllegalStateException("Transition to ACTIVE already occured. " + machineInformation());
-			}
-			if(!interval.begin().isEarlierThan(transitionEnd) || 
-					interval.begin().isEarlierThan(transitionEnd.minus(transitionDuration))) {
-				throw new IllegalArgumentException("I could accept this transition at another time. " + machineInformation());
-			}
-			currentDelay = currentDelay.plus(transitionEnd.minus(interval.begin()));
-			scheduleUserActivity(transitionEnd, interval.delta());
-			transitionToActiveMayOccur = false;
-
-			return this;
+			throw new IllegalStateException("Transition to SLEEPING is expected. " + machineInformation());
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
-			throw new IllegalStateException("Transition to ACTIVE, WakeOnLan or SLEEPING are expected. " + machineInformation());
+			throw new IllegalStateException("Transition to SLEEPING is expected. " + machineInformation());
 		}
 		@Override
 		public MachineState toSleep(TimeInterval interval) {
