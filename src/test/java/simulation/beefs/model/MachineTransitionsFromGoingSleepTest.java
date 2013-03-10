@@ -2,7 +2,6 @@ package simulation.beefs.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import manelsim.EventScheduler;
 import manelsim.EventSource;
 import manelsim.Time;
@@ -11,7 +10,6 @@ import manelsim.Time.Unit;
 import org.junit.Before;
 import org.junit.Test;
 
-import simulation.beefs.event.machine.UserActivity;
 import simulation.beefs.event.machine.WakeOnLan;
 import simulation.beefs.model.Machine.State;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
@@ -54,43 +52,9 @@ public class MachineTransitionsFromGoingSleepTest {
 		assertEquals(State.SLEEPING, machineGoingSleep.getState());
 	}
 
-	@Test
-	/*
-	 * An activity event arrives before the transition end everytime the TRANSITION_DURATION + TO_SLEEP_TIMEOUT is 
-	 * greater than the original idleness period that put the machine to sleep.
-	 */
+	@Test(expected=IllegalStateException.class)
 	public void testTransitionToActive() { 
 		Time activityStart = TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION.minus(ONE_SECOND));
-		machineGoingSleep.setActive(activityStart, ONE_MINUTE);
-		Time transitionEnd = TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION);
-		assertEquals(transitionEnd.minus(activityStart), machineGoingSleep.currentDelay());
-		assertEquals(State.GOING_SLEEP, machineGoingSleep.getState());
-		
-		UserActivity activityEvent = new UserActivity(machineGoingSleep, transitionEnd, ONE_MINUTE, false);
-		assertTrue(eventsMultiplexer.contains(activityEvent));
-	}
-	
-	@Test
-	public void testTransitionToActiveTwice() {
-		Time activityStart = TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION.minus(ONE_SECOND));
-		machineGoingSleep.setActive(activityStart, ONE_MINUTE);
-		try {
-			machineGoingSleep.setActive(activityStart, ONE_MINUTE);
-			fail();
-		} catch(IllegalStateException e) {
-			// ok
-		}
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testTransitionToActiveInFuture() {
-		Time activityStart = TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION.plus(ONE_SECOND));
-		machineGoingSleep.setActive(activityStart, ONE_MINUTE);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testTransitionToActiveInPast() {
-		Time activityStart = TO_SLEEP_TIMEOUT.minus(ONE_SECOND);
 		machineGoingSleep.setActive(activityStart, ONE_MINUTE);
 	}
 	
