@@ -27,7 +27,7 @@ public class Read extends MachineDelaybleEvent {
 
 	@Override
 	public String toString() {
-		return "read\t" + getScheduledTime() + "\t" + filePath + "\t" + bytesTransfered;
+		return "read\t" + getScheduledTime() + "\t" + filePath + "\t" + bytesTransfered+ "\t" + client.getHost().getName();
 	}
 
 	@Override

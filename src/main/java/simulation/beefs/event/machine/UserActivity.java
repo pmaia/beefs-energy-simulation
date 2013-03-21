@@ -31,7 +31,7 @@ public class UserActivity extends MachineDelaybleEvent {
 
 	@Override
 	public String toString() {
-		return String.format("activity\t%s\t%s", getScheduledTime(), duration);
+		return String.format("activity\t%s\t%s\t%s", getScheduledTime(), duration, host.getName());
 	}
 	
 	public Time getDuration() {

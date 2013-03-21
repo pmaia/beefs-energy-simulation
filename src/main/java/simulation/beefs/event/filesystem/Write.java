@@ -30,7 +30,7 @@ public class Write extends MachineDelaybleEvent {
 
 	@Override
 	public String toString() {
-		return "write\t" + getScheduledTime() + "\t" + filePath + "\t" + bytesTransfered + "\t" + fileSize;
+		return "write\t" + getScheduledTime() + "\t" + filePath + "\t" + bytesTransfered + "\t" + fileSize + "\t" + client.getHost().getName();
 	}
 
 	@Override

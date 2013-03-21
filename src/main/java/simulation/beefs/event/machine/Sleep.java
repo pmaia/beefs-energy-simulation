@@ -28,6 +28,6 @@ public class Sleep extends Event {
 	
 	@Override
 	public String toString() {
-		return String.format("sleep\t%s\t%s", getScheduledTime(), duration);
+		return String.format("sleep\t%s\t%s\t%s", getScheduledTime(), duration, machine.getName());
 	}
 }

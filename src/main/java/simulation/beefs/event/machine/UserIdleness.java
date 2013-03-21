@@ -36,4 +36,8 @@ public class UserIdleness extends MachineDelaybleEvent {
 		return this.duration;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("idleness\t%s\t%s\t%s", getScheduledTime(), duration, machine.getName());
+	}
 }

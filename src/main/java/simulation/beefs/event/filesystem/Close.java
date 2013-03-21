@@ -24,5 +24,10 @@ public class Close extends MachineDelaybleEvent {
 	public void process() {
 		client.close(filePath);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("close\t%s\t%s", getScheduledTime(), client.getHost().getName());
+	}
 
 }

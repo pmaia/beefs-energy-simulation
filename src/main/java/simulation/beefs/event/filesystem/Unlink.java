@@ -26,7 +26,7 @@ public class Unlink extends MachineDelaybleEvent {
 	
 	@Override
 	public String toString() {
-		return "unlink\t" + getScheduledTime() + "\t" + filePath;
+		return "unlink\t" + getScheduledTime() + "\t" + filePath + "\t" + client.getHost().getName();
 	}
 
 	@Override

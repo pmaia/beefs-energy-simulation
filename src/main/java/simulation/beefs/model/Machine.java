@@ -2,7 +2,9 @@ package simulation.beefs.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
+import manelsim.Event;
 import manelsim.EventScheduler;
 import manelsim.Time;
 import manelsim.TimeInterval;
@@ -155,12 +157,27 @@ public class Machine {
 	}
 	
 	private String machineInformation() {
-		return String.format("Machine: %s. Current delay %s", hostname, currentDelay);
+		return String.format("Machine: %s. Current delay %s. Events scheduled: %s\n", hostname, currentDelay, scheduledEvents());
 	}
 	
+	private String scheduledEvents() {
+		PriorityQueue<Event> queue = EventScheduler.eventSourceMultiplexer.generatedEventsQueue;
+		if(queue.isEmpty()) {
+			return "nada esta agendado";
+		}
+		StringBuffer sb = new StringBuffer();
+		for(Event event : queue) {
+			sb.append(String.format("Evento: %s\n", event));
+		}
+		sb.append("=====================");
+		return sb.toString();
+	}
+
 	// the next four methods are used by State implementations to schedule new events
-	private void scheduleSleep(Time begin, Time duration) {
-		EventScheduler.schedule(new Sleep(this, begin, duration));
+	private void scheduleSleep(Time begin, Time duration, String source) {
+		Sleep sleep = new Sleep(this, begin, duration);
+		System.out.println(String.format("Sleep scheduled: %s, Source: %s, When: %s", sleep, source, EventScheduler.now()));
+		EventScheduler.schedule(sleep);
 	}
 	
 	private void scheduleUserActivity(Time begin, Time duration) {
@@ -203,10 +220,13 @@ public class Machine {
 		
 		private boolean sleepIsExpected = false;
 		
+		private Time sleepTime;
+		
 		public Idle(TimeInterval interval) {
 			if(toSleepTimeout.isEarlierThan(interval.delta())) { // then, schedule a sleep event on now + toSleepTimeout
 				Time sleepBegin = interval.begin().plus(toSleepTimeout);
-				scheduleSleep(sleepBegin, interval.end().minus(sleepBegin));
+				sleepTime = sleepBegin;
+				scheduleSleep(sleepBegin, interval.end().minus(sleepBegin), "Idle constructor");
 				sleepIsExpected = true;
 				interval = new TimeInterval(interval.begin(), interval.begin().plus(toSleepTimeout));
 			}
@@ -215,7 +235,7 @@ public class Machine {
 		@Override
 		public MachineState toActive(TimeInterval interval) {
 			if(sleepIsExpected) {
-				throw new IllegalStateException("transition to SLEEP is expected. " + machineInformation());
+				throw new IllegalStateException(String.format("transition to SLEEP is expected at %s. %s", sleepTime, machineInformation()));
 			}
 			checkContinuity(interval); 
 			return new Active(interval);
@@ -232,7 +252,7 @@ public class Machine {
 			checkContinuity(interval);
 			
 			Time sleepDuration =  Time.max(interval.delta().minus(transitionDuration), Time.GENESIS);
-			scheduleSleep(interval.begin().plus(transitionDuration), sleepDuration);
+			scheduleSleep(interval.begin().plus(transitionDuration), sleepDuration, "Idle.toSleep()");
 			
 			Time delayIncrement = Time.max(transitionDuration.minus(interval.delta()), Time.GENESIS); 
 			
@@ -344,7 +364,7 @@ public class Machine {
 		}
 		@Override
 		public MachineState toActive(TimeInterval interval) {
-			throw new IllegalStateException("Transition to SLEEPING is expected. " + machineInformation());
+			throw new IllegalStateException(String.format("Transition to SLEEPING is expected at %s. %s", transitionEnd, machineInformation()));
 		}
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
@@ -373,10 +393,14 @@ public class Machine {
 		
 		private final boolean expectTransitionToIdle;
 		
+		private final Time nextTransition;
+		
 		public WakingUp(Time time, Time delayIncrement, boolean expectTransitionToIdle) {
 			TimeInterval transitionInterval = new TimeInterval(time, time.plus(transitionDuration));
 			stateIntervals.add(new MachineStateInterval(State.WAKING_UP, transitionInterval));
 			this.expectTransitionToIdle = expectTransitionToIdle;
+			
+			nextTransition = transitionInterval.end();
 			
 			currentDelay = currentDelay.plus(delayIncrement);
 		}
@@ -391,7 +415,7 @@ public class Machine {
 		@Override
 		public MachineState toIdle(TimeInterval interval) {
 			if(!expectTransitionToIdle) {
-				throw new IllegalStateException("Transition to ACTIVE is expected. " + machineInformation());
+				throw new IllegalStateException(String.format("Transition to ACTIVE is expected at %s. %s", nextTransition, machineInformation()));
 			}
 			checkContinuity(interval);
 			return new Idle(interval);

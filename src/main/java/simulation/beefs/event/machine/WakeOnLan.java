@@ -20,5 +20,10 @@ public class WakeOnLan extends Event {
 	public void process() {
 		machine.wakeOnLan(getScheduledTime());
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("wakeOnLan\t%s\t%s", getScheduledTime(), machine.getName());
+	}
 
 }

@@ -22,4 +22,9 @@ public class UpdateFileReplicas extends Event {
 		metadataServer.updateReplicas(file);
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("UpdateFileReplica\t%s\t%s", getScheduledTime(), file.getFullPath());
+	}
+	
 }
