@@ -1,7 +1,10 @@
 package simulation.beefs.model;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import manelsim.EventScheduler;
@@ -24,6 +27,8 @@ public class MetadataServer {
 	private final Time timeToDelete;
 
 	private final Map<String, ReplicatedFile> files = new HashMap<String, ReplicatedFile>();
+	
+	private final Map<String, UpdateFileReplicas> scheduledUpdateReplicasEvents = new HashMap<String, UpdateFileReplicas>();
 
 	// Patrick: I'm considering that there is just one DataServer per machine.
 	private final Map<String, DataServer> dataServerByHost = new HashMap<String, DataServer>();
@@ -48,11 +53,28 @@ public class MetadataServer {
 		ReplicatedFile file = files.get(filePath);
 		
 		if(file != null && !file.areReplicasConsistent() && file.getSecondaries().size() > 0) {
+			cleanUpProcessedEvents();
 			Time now = EventScheduler.now();
-			EventScheduler.schedule(new UpdateFileReplicas(now.plus(timeToCoherence), file, this));
+			UpdateFileReplicas old = scheduledUpdateReplicasEvents.get(file.getFullPath());
+			if(old != null) {
+				EventScheduler.cancel(old);
+			}
+			UpdateFileReplicas updateFileReplicas = new UpdateFileReplicas(now.plus(timeToCoherence), file, this);
+			EventScheduler.schedule(updateFileReplicas);
+			scheduledUpdateReplicasEvents.put(file.getFullPath(), updateFileReplicas);
 		}
 	}
 	
+	private void cleanUpProcessedEvents() {
+		List<Entry<String, UpdateFileReplicas>> toRemove = new LinkedList<Entry<String, UpdateFileReplicas>>();
+		for(Entry<String, UpdateFileReplicas> entry : scheduledUpdateReplicasEvents.entrySet()) {
+			if(entry.getValue().wasProcessed()) {
+				toRemove.add(entry);
+			}
+		}
+		scheduledUpdateReplicasEvents.entrySet().removeAll(toRemove);
+	}
+
 	public void updateReplicas(ReplicatedFile file) {
 		if(wakeOnLan) {
 			wakeUpIfSleeping(file.getPrimary().getHost());
