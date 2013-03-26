@@ -4,11 +4,6 @@ import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.FileSystemClient;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class Read extends MachineDelaybleEvent {
 
 	private final long bytesTransfered;
@@ -16,13 +11,17 @@ public class Read extends MachineDelaybleEvent {
 	private final FileSystemClient client;
 	private final Time duration;
 
-	public Read(FileSystemClient client, Time scheduledTime, Time duration, String filePath, long bytesTransfered) {
-		super(client.getHost(), scheduledTime, true);
+	public Read(FileSystemClient client, Time scheduledTime, Time duration, String filePath, long bytesTransfered, boolean delayable) {
+		super(client.getHost(), scheduledTime, delayable);
 		
 		this.duration = duration;
 		this.client = client;
 		this.filePath = filePath;
 		this.bytesTransfered = bytesTransfered;
+	}
+	
+	public Read(FileSystemClient client, Time scheduledTime, Time duration, String filePath, long bytesTransfered) {
+		this(client, scheduledTime, duration, filePath, bytesTransfered, true);
 	}
 
 	@Override

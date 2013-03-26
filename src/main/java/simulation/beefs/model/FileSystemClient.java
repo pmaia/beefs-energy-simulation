@@ -58,7 +58,7 @@ public class FileSystemClient {
 				
 				Time delta = primary.getHost().getTransitionDuration().plus(ONE_SECOND);
 				EventScheduler.schedule(
-						new Read(this, begin.plus(delta), duration, filePath, bytesTransfered));
+						new Read(this, begin.plus(delta), duration, filePath, bytesTransfered, false));
 			} else {
 				readsWhileDataServerSleeping++;
 			}
@@ -80,7 +80,7 @@ public class FileSystemClient {
 				
 				Time delta = primary.getHost().getTransitionDuration().plus(ONE_SECOND);
 				EventScheduler.schedule(
-						new Write(this, begin.plus(delta), duration, filePath, bytesTransfered, fileSize));
+						new Write(this, begin.plus(delta), duration, filePath, bytesTransfered, fileSize, false));
 			} else {
 				writesWhileDataServerSleeping++;
 			}
