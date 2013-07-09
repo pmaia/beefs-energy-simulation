@@ -28,9 +28,9 @@ import simulation.beefs.model.ReplicatedFile;
  * 
  * @author thiagoepdc - thiagoepdc@lsd.ufcg.edu.br
  */
-public class CoLocatedWithSecondaryRandomPlacement extends DataPlacementAlgorithm {
+public class CoLocatedWithSecondaryRandom extends DataPlacement {
 	
-	public CoLocatedWithSecondaryRandomPlacement(Set<DataServer> dataServers) {
+	public CoLocatedWithSecondaryRandom(Set<DataServer> dataServers) {
 		super(dataServers);
 	}
 

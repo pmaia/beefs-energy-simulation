@@ -20,6 +20,7 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
+import simulation.beefs.placement.DataPlacement;
 
 public class UnlinkTest {
 	
@@ -45,7 +46,8 @@ public class UnlinkTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
 		boolean wakeOnLan = true;
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 0, timeToCoherence, timeToDelete, wakeOnLan);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		client.createOrOpen(filePath);
@@ -65,7 +67,8 @@ public class UnlinkTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
 		boolean wakeOnLan = true;
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 0, timeToCoherence, timeToDelete, wakeOnLan);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		replay(eventSourceMock);
@@ -87,7 +90,8 @@ public class UnlinkTest {
 		dataServers.add(new DataServer(cherne));
 		dataServers.add(new DataServer(pepino));
 		boolean wakeOnLan = true;
-		MetadataServer metadataServer = new MetadataServer(dataServers, "random", 2, timeToCoherence, timeToDelete, wakeOnLan);
+		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 2, timeToCoherence, timeToDelete, wakeOnLan);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 		
 		ReplicatedFile file = client.createOrOpen(filePath);

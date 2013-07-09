@@ -24,6 +24,7 @@ import simulation.beefs.model.DataServer;
 import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
+import simulation.beefs.placement.DataPlacement;
 
 /**
  * 
@@ -66,7 +67,8 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		Set<DataServer> dataServers = createDataServers(machines);
 
 		//create metadata server
-		String placementPoliceName = config.getProperty(BeefsEnergySimulationConstants.PLACEMENT_POLICE);
+		String placementPolicyName = config.getProperty(BeefsEnergySimulationConstants.PLACEMENT_POLICE);
+		DataPlacement placementPolicy = DataPlacement.newDataPlacement(placementPolicyName, dataServers);
 		Integer replicationLevel = Integer.valueOf(config.getProperty(BeefsEnergySimulationConstants.REPLICATION_LEVEL));
 		Time timeToCoherence = 
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_COHERENCE)), Unit.SECONDS);
@@ -75,7 +77,7 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		
 		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
 		MetadataServer metadataServer = 
-				new MetadataServer(dataServers, placementPoliceName, replicationLevel, timeToCoherence, timeToDelete, wakeOnLan); 
+				new MetadataServer(dataServers, placementPolicy, replicationLevel, timeToCoherence, timeToDelete, wakeOnLan); 
 
 		// create clients
 		Set<FileSystemClient> clients = createClients(machines, metadataServer, wakeOnLan);

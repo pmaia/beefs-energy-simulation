@@ -27,19 +27,22 @@ import simulation.beefs.model.ReplicatedFile;
  * 
  * @author thiagoepdc - thiagoepdc@lsd.ufcg.edu.br
  */
-public abstract class DataPlacementAlgorithm {
+public abstract class DataPlacement {
+	
+	public static final String RANDOM = "random";
+	public static final String CO_RANDOM = "co-random";
 	
 	protected Set<DataServer> dataServers;
 	
-	public DataPlacementAlgorithm(Set<DataServer> dataServers) {
+	public DataPlacement(Set<DataServer> dataServers) {
 		this.dataServers = dataServers;
 	}
 	
-	public static DataPlacementAlgorithm newDataPlacementAlgorithm(String type, Set<DataServer> dataServers) {
-		if("co-random".equals(type)) {
-			return new CoLocatedWithSecondaryRandomPlacement(dataServers);
-		} else if("random".equals(type)) {
-			return new RandomDataPlacementAlgorithm(dataServers);
+	public static DataPlacement newDataPlacement(String type, Set<DataServer> dataServers) {
+		if(CO_RANDOM.equals(type)) {
+			return new CoLocatedWithSecondaryRandom(dataServers);
+		} else if(RANDOM.equals(type)) {
+			return new Random(dataServers);
 		} else {
 			throw new IllegalArgumentException(type + " is not a valid DataPlacementAlgorithm type.");
 		}

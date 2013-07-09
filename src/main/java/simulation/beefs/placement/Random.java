@@ -28,9 +28,9 @@ import simulation.beefs.model.ReplicatedFile;
  * 
  * @author thiagoepdc - thiagoepdc@lsd.ufcg.edu.br
  */
-public class RandomDataPlacementAlgorithm extends DataPlacementAlgorithm {
+public class Random extends DataPlacement {
 	
-	public RandomDataPlacementAlgorithm(Set<DataServer> dataServers) {
+	public Random(Set<DataServer> dataServers) {
 		super(dataServers);
 	}
 

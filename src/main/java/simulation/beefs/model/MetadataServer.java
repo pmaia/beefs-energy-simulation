@@ -11,14 +11,14 @@ import manelsim.EventScheduler;
 import manelsim.Time;
 import simulation.beefs.event.filesystem.DeleteFileReplicas;
 import simulation.beefs.event.filesystem.UpdateFileReplicas;
-import simulation.beefs.placement.DataPlacementAlgorithm;
+import simulation.beefs.placement.DataPlacement;
 
 /**
  * @author Patrick Maia
  */
 public class MetadataServer {
 	
-	private final DataPlacementAlgorithm dataPlacement;
+	private final DataPlacement dataPlacement;
 	
 	private final int replicationLevel;
 	
@@ -35,14 +35,14 @@ public class MetadataServer {
 
 	private final boolean wakeOnLan;
 
-	public MetadataServer(Set<DataServer> dataServers, String dataPlacementStrategy, 
+	public MetadataServer(Set<DataServer> dataServers, DataPlacement dataPlacementStrategy, 
 			int replicationLevel, Time timeToCoherence, Time timeToDelete, boolean wakeOnLan) {
 		
 		for(DataServer dataServer : dataServers) {
 			dataServerByHost.put(dataServer.getHost().getName(), dataServer);
 		}
 		
-		this.dataPlacement = DataPlacementAlgorithm.newDataPlacementAlgorithm(dataPlacementStrategy, dataServers);
+		this.dataPlacement = dataPlacementStrategy;
 		this.replicationLevel = replicationLevel;
 		this.timeToCoherence = timeToCoherence;
 		this.timeToDelete = timeToDelete;

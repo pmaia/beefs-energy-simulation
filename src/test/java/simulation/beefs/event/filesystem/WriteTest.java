@@ -22,6 +22,7 @@ import simulation.beefs.model.Machine;
 import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
+import simulation.beefs.placement.DataPlacement;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
 public class WriteTest {
@@ -45,7 +46,8 @@ public class WriteTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
 		boolean wakeOnLan = true;
-		metadataServer = new MetadataServer(dataServers, "random", 0, timeToCoherence, timeToDelete, wakeOnLan);
+		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
+		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 0, timeToCoherence, timeToDelete, wakeOnLan);
 		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);		
 	}
 	
