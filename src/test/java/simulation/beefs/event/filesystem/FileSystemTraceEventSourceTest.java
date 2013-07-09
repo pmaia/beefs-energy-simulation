@@ -20,6 +20,8 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.placement.DataPlacement;
+import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.Replicator;
 import simulation.beefs.util.FakeFileSystemTraceStream;
 
 /**
@@ -42,7 +44,8 @@ public class FileSystemTraceEventSourceTest {
 		dataServers.add(new DataServer(jurupoca));
 		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 0, Time.GENESIS, Time.GENESIS, wakeOnLan);
+		Replicator replicator = new Faithful(wakeOnLan);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, Time.GENESIS, Time.GENESIS);
 		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 	}
 

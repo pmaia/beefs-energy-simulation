@@ -12,6 +12,7 @@ import manelsim.Time;
 import simulation.beefs.event.filesystem.DeleteFileReplicas;
 import simulation.beefs.event.filesystem.UpdateFileReplicas;
 import simulation.beefs.placement.DataPlacement;
+import simulation.beefs.replication.Replicator;
 
 /**
  * @author Patrick Maia
@@ -19,6 +20,8 @@ import simulation.beefs.placement.DataPlacement;
 public class MetadataServer {
 	
 	private final DataPlacement dataPlacement;
+	
+	private final Replicator replicator;
 	
 	private final int replicationLevel;
 	
@@ -33,20 +36,18 @@ public class MetadataServer {
 	// Patrick: I'm considering that there is just one DataServer per machine.
 	private final Map<String, DataServer> dataServerByHost = new HashMap<String, DataServer>();
 
-	private final boolean wakeOnLan;
-
 	public MetadataServer(Set<DataServer> dataServers, DataPlacement dataPlacementStrategy, 
-			int replicationLevel, Time timeToCoherence, Time timeToDelete, boolean wakeOnLan) {
+			Replicator replicator, int replicationLevel, Time timeToCoherence, Time timeToDelete) {
 		
 		for(DataServer dataServer : dataServers) {
 			dataServerByHost.put(dataServer.getHost().getName(), dataServer);
 		}
 		
 		this.dataPlacement = dataPlacementStrategy;
+		this.replicator = replicator;
 		this.replicationLevel = replicationLevel;
 		this.timeToCoherence = timeToCoherence;
 		this.timeToDelete = timeToDelete;
-		this.wakeOnLan = wakeOnLan;
 	}
 	
 	public void close(String filePath) {
@@ -76,20 +77,9 @@ public class MetadataServer {
 	}
 
 	public void updateReplicas(ReplicatedFile file) {
-		if(wakeOnLan) {
-			wakeUpIfSleeping(file.getPrimary().getHost());
-			for(DataServer replicaDataServer : file.getSecondaries()) {
-				wakeUpIfSleeping(replicaDataServer.getHost());
-			}
-		}
+		replicator.updateReplicas(file);
 	}
 	
-	private void wakeUpIfSleeping(Machine machine) {
-		if(!machine.isReachable()) {
-			machine.wakeOnLan(EventScheduler.now());
-		}
-	}
-
 	public void delete(String filePath) {
 		ReplicatedFile file = files.remove(filePath);
 		//FIXME Patrick: tenho que fazer aqui em file.getPrimary() o mesmo que eu fizer em DeleteFileReplicas.process()

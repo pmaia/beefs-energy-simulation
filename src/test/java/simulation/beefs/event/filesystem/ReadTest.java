@@ -22,6 +22,8 @@ import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
 import simulation.beefs.placement.DataPlacement;
+import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.Replicator;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
 /**
@@ -52,7 +54,8 @@ public class ReadTest {
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
 		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, 0, timeToCoherence, timeToDelete, wakeOnLan);
+		Replicator replicator = new Faithful(wakeOnLan);
+		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
 		
 		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
 	}

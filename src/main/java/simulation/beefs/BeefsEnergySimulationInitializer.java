@@ -25,6 +25,8 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.placement.DataPlacement;
+import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.Replicator;
 
 /**
  * 
@@ -76,8 +78,9 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
 		
 		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
+		Replicator replicator = new Faithful(wakeOnLan);
 		MetadataServer metadataServer = 
-				new MetadataServer(dataServers, placementPolicy, replicationLevel, timeToCoherence, timeToDelete, wakeOnLan); 
+				new MetadataServer(dataServers, placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete); 
 
 		// create clients
 		Set<FileSystemClient> clients = createClients(machines, metadataServer, wakeOnLan);
