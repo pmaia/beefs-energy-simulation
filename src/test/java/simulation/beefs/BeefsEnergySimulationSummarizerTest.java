@@ -18,9 +18,6 @@ import simulation.beefs.energy.Conservative;
 import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine;
 
-/**
- * @author Patrick Maia	
- */
 public class BeefsEnergySimulationSummarizerTest {
 	@Test
 	public void summarizeTest() {

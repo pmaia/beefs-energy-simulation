@@ -3,5 +3,5 @@ package simulation.beefs.replication;
 import simulation.beefs.model.ReplicatedFile;
 
 public interface Replicator {
-	void updateReplicas(ReplicatedFile file);
+	ReplicatedFile updateReplicas(ReplicatedFile file);
 }

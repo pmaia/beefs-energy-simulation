@@ -34,9 +34,6 @@ public class CoLocatedWithSecondaryRandom extends DataPlacement {
 		super(dataServers);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ReplicatedFile createFile(FileSystemClient client, String fileName, int replicationLevel) {
 		

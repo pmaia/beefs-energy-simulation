@@ -410,5 +410,10 @@ public class Machine {
 			return State.WAKING_UP;
 		}
 	}
+
+	public Time lastTransitionTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
