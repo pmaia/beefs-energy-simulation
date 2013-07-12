@@ -52,12 +52,11 @@ public class ReadTest {
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
 		
-		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		client = new FileSystemClient(jurupoca, metadataServer, true);
 	}
 	
 	@Test

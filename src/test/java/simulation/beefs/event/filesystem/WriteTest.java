@@ -48,10 +48,9 @@ public class WriteTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		boolean wakeOnLan = true;
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
-		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);		
+		client = new FileSystemClient(jurupoca, metadataServer, true);		
 	}
 	
 	@Test

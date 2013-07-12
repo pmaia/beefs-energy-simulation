@@ -11,20 +11,12 @@ import simulation.beefs.model.ReplicatedFile;
  *
  */
 public class Faithful implements Replicator {
-	
-	private final boolean wakeOnLan;
-	
-	public Faithful(boolean wakeOnLan) {
-		this.wakeOnLan = wakeOnLan;
-	}
-	
+
 	@Override
 	public ReplicatedFile updateReplicas(ReplicatedFile file) {
-		if(wakeOnLan) {
-			wakeUpIfSleeping(file.getPrimary().getHost());
-			for(DataServer replicaDataServer : file.getSecondaries()) {
-				wakeUpIfSleeping(replicaDataServer.getHost());
-			}
+		wakeUpIfSleeping(file.getPrimary().getHost());
+		for(DataServer replicaDataServer : file.getSecondaries()) {
+			wakeUpIfSleeping(replicaDataServer.getHost());
 		}
 		return file;
 	}

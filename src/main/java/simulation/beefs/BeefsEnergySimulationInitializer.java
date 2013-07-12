@@ -25,7 +25,6 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.placement.DataPlacement;
-import simulation.beefs.replication.Faithful;
 import simulation.beefs.replication.Replicator;
 
 /**
@@ -77,24 +76,20 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		Time timeToDelete = 
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
 		
-		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
-		Replicator replicator = new Faithful(wakeOnLan);
+		// instantiate replicator
+		String replicatorClassName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
+		Replicator replicator = (Replicator) instantiate(replicatorClassName);
+		
 		MetadataServer metadataServer = 
 				new MetadataServer(dataServers, placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete); 
 
 		// create clients
+		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
 		Set<FileSystemClient> clients = createClients(machines, metadataServer, wakeOnLan);
 		
 		// instantiate energy consumption model
-		String energyConsumptionModelClassName = 
-				config.getProperty(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL); 
-		
-		EnergyConsumptionModel energyConsumptionModel;
-		try {
-			energyConsumptionModel = (EnergyConsumptionModel)Class.forName(energyConsumptionModelClassName).newInstance();
-		} catch (Throwable t) {
-			throw new RuntimeException("Could not instantiate EnergyConsumptionModel", t);
-		}
+		String energyConsumptionModelClassName = config.getProperty(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL); 
+		EnergyConsumptionModel energyConsumptionModel = (EnergyConsumptionModel) instantiate(energyConsumptionModelClassName);
 		
 		// setup context
 		Time emulationStartTime = 
@@ -110,6 +105,14 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		context.add(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL, energyConsumptionModel);
 
 		return context;
+	}
+	
+	private Object instantiate(String className) {
+		try {
+			return Class.forName(className).newInstance();
+		} catch (Throwable t) {
+			throw new RuntimeException("Could not instantiate " + className, t);
+		}
 	}
 
 	private EventSourceMultiplexer createEventSourceMultiplexer(Set<FileSystemClient> clients, 

@@ -42,11 +42,10 @@ public class FileSystemTraceEventSourceTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, Time.GENESIS, Time.GENESIS);
-		client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		client = new FileSystemClient(jurupoca, metadataServer, true);
 	}
 
 	@Test

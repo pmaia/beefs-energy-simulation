@@ -50,11 +50,10 @@ public class CloseTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		client.createOrOpen(filePath);
 		
@@ -73,11 +72,10 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca));
 		dataServers.add(new DataServer(cherne));
 		dataServers.add(new DataServer(pepino));
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		client.createOrOpen(filePath);
 		
@@ -96,11 +94,10 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca));
 		dataServers.add(new DataServer(cherne));
 		dataServers.add(new DataServer(pepino));
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
 		file.setReplicasAreConsistent(false);
@@ -120,11 +117,10 @@ public class CloseTest {
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca));
-		boolean wakeOnLan = true;
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful(wakeOnLan);
+		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, wakeOnLan);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		replay(eventSourceMock);
 		Close close = new Close(client, closeTime, filePath);
