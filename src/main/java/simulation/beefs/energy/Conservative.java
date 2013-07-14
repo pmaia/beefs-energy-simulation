@@ -4,11 +4,6 @@ import java.util.List;
 
 import manelsim.Time;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class Conservative implements EnergyConsumptionModel {
 	
 	/*

@@ -2,11 +2,6 @@ package simulation.beefs.energy;
 
 import java.util.List;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public interface EnergyConsumptionModel {
 	/**
 	 * 

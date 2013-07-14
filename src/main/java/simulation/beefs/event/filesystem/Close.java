@@ -4,10 +4,6 @@ import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.FileSystemClient;
 
-/**
- * 
- * @author Patrick Maia - patrickjem@lsd.ufcg.edu.br
- */
 public class Close extends MachineDelaybleEvent {
 	
 	private final String filePath;

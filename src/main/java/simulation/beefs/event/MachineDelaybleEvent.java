@@ -4,9 +4,6 @@ import simulation.beefs.model.Machine;
 import manelsim.Event;
 import manelsim.Time;
 
-/**
- * @author Patrick Maia - patrick@lsd.ufcg.edu.br
- */
 public abstract class MachineDelaybleEvent extends Event {
 
 	private final Machine machine;

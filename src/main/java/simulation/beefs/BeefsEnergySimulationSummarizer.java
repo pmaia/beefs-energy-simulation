@@ -13,11 +13,6 @@ import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine.MachineStateInterval;
 import simulation.beefs.model.Machine.State;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class BeefsEnergySimulationSummarizer implements Summarizer {
 	
 	/**

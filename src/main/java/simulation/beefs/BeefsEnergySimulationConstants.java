@@ -1,10 +1,5 @@
 package simulation.beefs;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class BeefsEnergySimulationConstants {
 	
 	// Configuration keys

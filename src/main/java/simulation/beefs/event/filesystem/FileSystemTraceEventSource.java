@@ -12,11 +12,6 @@ import manelsim.Time;
 import manelsim.Time.Unit;
 import simulation.beefs.model.FileSystemClient;
 
-/**
- * A parser for the trace of calls to the file system.
- * 
- * @author Patrick Maia - patrickjem@lsd.ufcg.edu.br
- */
 public class FileSystemTraceEventSource implements EventSource {
 
 	private final BufferedReader bufferedReader;
@@ -28,9 +23,6 @@ public class FileSystemTraceEventSource implements EventSource {
 		this.client = client;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Event getNextEvent() {
 

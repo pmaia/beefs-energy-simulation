@@ -5,11 +5,6 @@ import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.Machine;
 
-/**
- * An {@link Event} representing an idleness period.
- *
- * @author Patrick Maia
- */
 public class UserIdleness extends MachineDelaybleEvent {
 	
 	private final Machine machine;

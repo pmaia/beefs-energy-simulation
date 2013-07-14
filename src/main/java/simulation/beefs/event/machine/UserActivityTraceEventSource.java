@@ -24,7 +24,6 @@ import simulation.beefs.model.Machine;
  * where &lt;start_timestamp&gt; are the seconds since epoch in which the event 
  * started and &lt;duration&gt; is the time in seconds during which the event lasted.
  *
- * @author Patrick Maia - patrickjem@lsd.ufcg.edu.br
  */
 public class UserActivityTraceEventSource implements EventSource {
 	

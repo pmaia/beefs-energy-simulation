@@ -14,9 +14,6 @@ import simulation.beefs.event.filesystem.UpdateFileReplicas;
 import simulation.beefs.placement.DataPlacement;
 import simulation.beefs.replication.Replicator;
 
-/**
- * @author Patrick Maia
- */
 public class MetadataServer {
 	
 	private final DataPlacement dataPlacement;

@@ -27,11 +27,6 @@ import simulation.beefs.model.MetadataServer;
 import simulation.beefs.placement.DataPlacement;
 import simulation.beefs.replication.Replicator;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class BeefsEnergySimulationInitializer implements Initializer {
 	
 	private static final FilenameFilter fsTracesFilter = new FilenameFilter() {

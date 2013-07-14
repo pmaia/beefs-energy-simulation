@@ -11,10 +11,6 @@ import simulation.beefs.event.machine.UserActivity;
 import simulation.beefs.event.machine.UserIdleness;
 import simulation.beefs.event.machine.WakeOnLan;
 
-/**
- *
- * @author Patrick Maia
- */
 public class Machine {
 	
 	public enum State {

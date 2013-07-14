@@ -3,11 +3,6 @@ package simulation.beefs.model;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class ReplicatedFile {
 	
 	private final String fullpath;

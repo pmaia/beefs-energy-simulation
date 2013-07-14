@@ -4,10 +4,6 @@ import manelsim.Time;
 import simulation.beefs.event.MachineDelaybleEvent;
 import simulation.beefs.model.Machine;
 
-/**
- *
- * @author Patrick Maia
- */
 public class UserActivity extends MachineDelaybleEvent {
 	
 	private final Machine host;

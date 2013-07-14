@@ -6,12 +6,6 @@ import manelsim.Time.Unit;
 import simulation.beefs.event.filesystem.Read;
 import simulation.beefs.event.filesystem.Write;
 
-
-/**
- * 
- * @author Patrick Maia - patrickjem@lsd.ufcg.edu.br
- *
- */
 public class FileSystemClient {
 	
 	private final Time ONE_SECOND = new Time(1, Unit.SECONDS);

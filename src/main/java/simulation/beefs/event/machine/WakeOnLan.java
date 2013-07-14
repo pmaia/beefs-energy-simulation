@@ -4,9 +4,6 @@ import manelsim.Event;
 import manelsim.Time;
 import simulation.beefs.model.Machine;
 
-/**
- * @author Patrick Maia
- */
 public class WakeOnLan extends Event {
 	
 	private final Machine machine;

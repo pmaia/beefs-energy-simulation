@@ -1,10 +1,5 @@
 package simulation.beefs.model;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class DataServer {
 	
 	private final Machine host;
