@@ -72,8 +72,8 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
 		
 		// instantiate replicator
-		String replicatorClassName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
-		Replicator replicator = (Replicator) instantiate(replicatorClassName);
+		String replicatorName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
+		Replicator replicator = Replicator.newReplicator(replicatorName, dataServers);
 		
 		MetadataServer metadataServer = 
 				new MetadataServer(dataServers, placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete); 

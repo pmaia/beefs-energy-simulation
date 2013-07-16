@@ -13,7 +13,7 @@ import simulation.beefs.model.ReplicatedFile;
  * Keep machines sleeping if some other machine can get the replica
  *
  */
-public class Kind implements Replicator {
+public class Kind extends Replicator {
 	
 	private final Set<DataServer> dataServers;
 	
