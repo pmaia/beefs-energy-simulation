@@ -2,35 +2,25 @@ package simulation.beefs.model;
 
 public class DataServer {
 
-	private long diskUsed = 0L;
-	
-	private final long diskSize;
+	private long freeSpace;
 	
 	private final Machine host;
 	
-	public DataServer(Machine host, long diskSize) {
+	public DataServer(Machine host, long freeSpace) {
 		this.host = host;
-		this.diskSize = diskSize;
-	}
-	
-	public long diskSize() {
-		return diskSize;
-	}
-	
-	public long diskUsed() {
-		return diskUsed;
+		this.freeSpace = freeSpace;
 	}
 	
 	public long freeSpace() {
-		return diskSize - diskUsed;
+		return freeSpace;
 	}
 	
 	public void useDisk(long bytes) {
-		diskUsed += bytes;
+		freeSpace -= bytes;
 	}
 	
 	public void cleanSpace(long bytes) {
-		diskUsed -= bytes;
+		freeSpace += bytes;
 	}
 
 	public Machine getHost() {
