@@ -43,65 +43,81 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		}
 	};
 	
+	private Properties config;
 	@Override
 	public Context initialize(Properties config) {
+		this.config = config;
 		
-		String tracesDirPath = config.getProperty(BeefsEnergySimulationConstants.TRACES_DIR);
-		File tracesDir = new File(tracesDirPath);
-		if(!tracesDir.exists() || !tracesDir.isDirectory())
-			throw new IllegalArgumentException(tracesDirPath + " doesn't exist or is not a directory");
-
-		// create machines
-		Time toSleepTimeout = 
-				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TO_SLEEP_TIMEOUT)), Unit.SECONDS);
-		Time transitionDuration = 
-				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TRANSITION_DURATION)), Unit.MILLISECONDS);
-		Set<Machine> machines = 
-				createMachines(tracesDir, toSleepTimeout, transitionDuration);
-
-		// create data servers
-		Set<DataServer> dataServers = createDataServers(machines);
-
-		//create metadata server
-		String placementPolicyName = config.getProperty(BeefsEnergySimulationConstants.PLACEMENT_POLICE);
-		DataPlacement placementPolicy = DataPlacement.newDataPlacement(placementPolicyName, dataServers);
-		Integer replicationLevel = Integer.valueOf(config.getProperty(BeefsEnergySimulationConstants.REPLICATION_LEVEL));
-		Time timeToCoherence = 
-				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_COHERENCE)), Unit.SECONDS);
-		Time timeToDelete = 
-				new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
-		
-		// instantiate replicator
-		String replicatorName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
-		Replicator replicator = Replicator.newReplicator(replicatorName, dataServers);
-		
-		MetadataServer metadataServer = 
-				new MetadataServer(dataServers, placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete); 
-
-		// create clients
-		Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
-		Set<FileSystemClient> clients = createClients(machines, metadataServer, wakeOnLan);
-		
-		// instantiate energy consumption model
-		String energyConsumptionModelClassName = config.getProperty(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL); 
-		EnergyConsumptionModel energyConsumptionModel = (EnergyConsumptionModel) instantiate(energyConsumptionModelClassName);
-		
-		// setup context
-		Time emulationStartTime = 
-			new Time(Long.parseLong(config.getProperty(BeefsEnergySimulationConstants.EMULATION_START_TIME)), Unit.SECONDS);
-		EventSourceMultiplexer eventSourceMultiplexer = 
-				createEventSourceMultiplexer(clients, machines, emulationStartTime, tracesDir);
-		
-		Context context = new Context(eventSourceMultiplexer);
-		context.add(BeefsEnergySimulationConstants.MACHINES, machines);
-		context.add(BeefsEnergySimulationConstants.DATA_SERVERS, dataServers);
-		context.add(BeefsEnergySimulationConstants.METADATA_SERVER, metadataServer);
-		context.add(BeefsEnergySimulationConstants.CLIENTS, clients);
-		context.add(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL, energyConsumptionModel);
+		Context context = new Context(eventSourceMultiplexer());
+		context.add(BeefsEnergySimulationConstants.MACHINES, machines());
+		context.add(BeefsEnergySimulationConstants.DATA_SERVERS, dataServers());
+		context.add(BeefsEnergySimulationConstants.METADATA_SERVER, metadataServer());
+		context.add(BeefsEnergySimulationConstants.CLIENTS, clients());
+		context.add(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL, energyConsumptionModel());
 
 		return context;
 	}
 	
+	private EventSourceMultiplexer _eventSourceMultiplexer = null;
+	private EventSourceMultiplexer eventSourceMultiplexer() {
+		if(_eventSourceMultiplexer == null) {
+			Time emulationStartTime = 
+					new Time(Long.parseLong(config.getProperty(BeefsEnergySimulationConstants.EMULATION_START_TIME)), Unit.SECONDS);
+
+			EventSource []  parsers = new EventSource[machines().size() + clients().size()];
+
+			try {
+				int parserCount = 0;
+				InputStream traceStream;
+				for(Machine machine : machines()) {
+					traceStream = 
+							new FileInputStream(new File(tracesDir(), "idleness-" + machine.getName()));
+					parsers[parserCount++] = new UserActivityTraceEventSource(machine, traceStream, emulationStartTime);
+				}
+				for(FileSystemClient client : clients()) {
+					traceStream = 
+							new FileInputStream(new File(tracesDir(), "fs-" + client.getHost().getName()));
+					parsers[parserCount++] = new FileSystemTraceEventSource(client, traceStream);
+				}
+
+			} catch (FileNotFoundException e) {
+				throw new IllegalStateException(e);
+			}
+
+			_eventSourceMultiplexer = new EventSourceMultiplexer(parsers); 
+		}
+		return _eventSourceMultiplexer;
+	}
+
+	private EnergyConsumptionModel _energyConsumptionModel = null;
+	private Object energyConsumptionModel() {
+		if(_energyConsumptionModel == null) {
+			String energyConsumptionModelClassName = config.getProperty(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL); 
+			_energyConsumptionModel = (EnergyConsumptionModel) instantiate(energyConsumptionModelClassName);
+		}
+		return _energyConsumptionModel;
+	}
+
+	private MetadataServer _metadataServer = null; 
+	private MetadataServer metadataServer() {
+		if(_metadataServer == null) {
+			String placementPolicyName = config.getProperty(BeefsEnergySimulationConstants.PLACEMENT_POLICE);
+			DataPlacement placementPolicy = DataPlacement.newDataPlacement(placementPolicyName, dataServers());
+			Integer replicationLevel = Integer.valueOf(config.getProperty(BeefsEnergySimulationConstants.REPLICATION_LEVEL));
+			Time timeToCoherence = 
+					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_COHERENCE)), Unit.SECONDS);
+			Time timeToDelete = 
+					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
+
+			String replicatorName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
+			Replicator replicator = Replicator.newReplicator(replicatorName, dataServers());
+
+			_metadataServer = 
+					new MetadataServer(dataServers(), placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete);
+		}
+		return _metadataServer;
+	}
+
 	private Object instantiate(String className) {
 		try {
 			return Class.forName(className).newInstance();
@@ -110,67 +126,60 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		}
 	}
 
-	private EventSourceMultiplexer createEventSourceMultiplexer(Set<FileSystemClient> clients, 
-			Set<Machine> machines, Time emulationStartTime, File tracesDir) {
-	
-		EventSource []  parsers = new EventSource[machines.size() + clients.size()];
-	
-		try {
-			int parserCount = 0;
-			InputStream traceStream;
-			for(Machine machine : machines) {
-				traceStream = 
-					new FileInputStream(new File(tracesDir, "idleness-" + machine.getName()));
-				parsers[parserCount++] = new UserActivityTraceEventSource(machine, traceStream, emulationStartTime);
-			}
-			for(FileSystemClient client : clients) {
-				traceStream = 
-					new FileInputStream(new File(tracesDir, "fs-" + client.getHost().getName()));
-				parsers[parserCount++] = new FileSystemTraceEventSource(client, traceStream);
-			}
-			
-		} catch (FileNotFoundException e) {
-			throw new IllegalStateException(e);
+	private File _tracesDir = null;
+	private File tracesDir() {
+		if(_tracesDir == null) {
+			String tracesDirPath = config.getProperty(BeefsEnergySimulationConstants.TRACES_DIR);
+			_tracesDir = new File(tracesDirPath);
+			if(!_tracesDir.exists() || !_tracesDir.isDirectory())
+				throw new IllegalArgumentException(tracesDirPath + " doesn't exist or is not a directory");
 		}
-		
-		return new EventSourceMultiplexer(parsers);
+		return _tracesDir;
 	}
 	
-	private Set<Machine> createMachines(File tracesDir, Time toSleepTimeout, Time transitionDuration) {
-		Set<Machine> machines = new HashSet<Machine>();
-		List<String> fsTracesFiles = Arrays.asList(tracesDir.list(fsTracesFilter));
-		List<String> idlenessTracesFiles = Arrays.asList(tracesDir.list(idlenessTracesFilter));
-	
-		for(String fsTraceFile : fsTracesFiles) {
-			String machineName = fsTraceFile.split("-")[1];
-			if(idlenessTracesFiles.contains("idleness-" + machineName)) {
-				machines.add(new Machine(machineName, toSleepTimeout, transitionDuration));
+	private Set<Machine> _machines = null;
+	private Set<Machine> machines() {
+		if(_machines == null) {
+			Time toSleepTimeout = 
+					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TO_SLEEP_TIMEOUT)), Unit.SECONDS);
+			Time transitionDuration = 
+					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TRANSITION_DURATION)), Unit.MILLISECONDS);
+			_machines = new HashSet<Machine>();
+			List<String> fsTracesFiles = Arrays.asList(tracesDir().list(fsTracesFilter));
+			List<String> idlenessTracesFiles = Arrays.asList(tracesDir().list(idlenessTracesFilter));
+
+			for(String fsTraceFile : fsTracesFiles) {
+				String machineName = fsTraceFile.split("-")[1];
+				if(idlenessTracesFiles.contains("idleness-" + machineName)) {
+					_machines.add(new Machine(machineName, toSleepTimeout, transitionDuration));
+				}
 			}
 		}
-	
-		return machines;
+		return _machines;
 	}
 	
-	private Set<FileSystemClient> createClients(Set<Machine> machines, 
-			MetadataServer metadataServer, boolean wakeOnLan) {
-	
-		Set<FileSystemClient> newClients = new HashSet<FileSystemClient>();
-	
-		for(Machine machine : machines) {
-			newClients.add(new FileSystemClient(machine, metadataServer, wakeOnLan));
+	private Set<FileSystemClient> _clients = null;
+	private Set<FileSystemClient> clients() {
+		if(_clients == null) {
+			Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
+			_clients = new HashSet<FileSystemClient>();
+			for(Machine machine : machines()) {
+				_clients.add(new FileSystemClient(machine, metadataServer(), wakeOnLan));
+			}
 		}
-	
-		return newClients;
+		return _clients;
 	}
 	
-	private Set<DataServer> createDataServers(Set<Machine> machines) {
-		Set<DataServer> dataServers = new HashSet<DataServer>();
-	
-		for (Machine machine : machines) {
-			dataServers.add(new DataServer(machine));
+	private Set<DataServer> _dataServers;
+	private Set<DataServer> dataServers(){
+		if(_dataServers == null) {
+			_dataServers = new HashSet<DataServer>();
+
+			for (Machine machine : machines()) {
+				_dataServers.add(new DataServer(machine));
+			}
 		}
-	
-		return dataServers;
+		return _dataServers;
 	}
 
 }
