@@ -24,12 +24,9 @@ import simulation.beefs.replication.Faithful;
 import simulation.beefs.replication.Replicator;
 import simulation.beefs.util.FakeFileSystemTraceStream;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class FileSystemTraceEventSourceTest {
+	
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
 	
 	private static final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);
 	private static final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);
@@ -41,7 +38,7 @@ public class FileSystemTraceEventSourceTest {
 		Machine jurupoca = new Machine("jurupoca", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, Time.GENESIS, Time.GENESIS);

@@ -29,6 +29,8 @@ import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
 public class WriteTest {
 	
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	
 	private static final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);
 	private static final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);
 	private static final Time ONE_MINUTE = new Time(60, Unit.SECONDS);
@@ -46,7 +48,7 @@ public class WriteTest {
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);

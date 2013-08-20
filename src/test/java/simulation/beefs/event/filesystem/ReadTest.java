@@ -33,6 +33,8 @@ import simulation.beefs.util.ObservableEventSourceMultiplexer;
  */
 public class ReadTest {
 	
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	
 	private final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);
 	private final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);
 	private final Time ONE_MINUTE = new Time(60, Unit.SECONDS);
@@ -48,7 +50,7 @@ public class ReadTest {
 		jurupoca.setIdle(Time.GENESIS, ONE_MINUTE);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
 		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);

@@ -172,11 +172,12 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 	
 	private Set<DataServer> _dataServers;
 	private Set<DataServer> dataServers(){
+		long diskSize = Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.DISK_SIZE));
 		if(_dataServers == null) {
 			_dataServers = new HashSet<DataServer>();
 
 			for (Machine machine : machines()) {
-				_dataServers.add(new DataServer(machine));
+				_dataServers.add(new DataServer(machine, diskSize));
 			}
 		}
 		return _dataServers;

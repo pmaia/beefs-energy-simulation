@@ -26,6 +26,8 @@ import simulation.beefs.replication.Replicator;
 
 public class UnlinkTest {
 	
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	
 	private static final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);
 	private static final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);
 	
@@ -46,7 +48,7 @@ public class UnlinkTest {
 		Machine jurupoca = new Machine("jurupoca", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
@@ -67,7 +69,7 @@ public class UnlinkTest {
 		Machine jurupoca = new Machine("jurupoca", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
@@ -88,9 +90,9 @@ public class UnlinkTest {
 		Machine pepino = new Machine("pepino", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
-		dataServers.add(new DataServer(jurupoca));
-		dataServers.add(new DataServer(cherne));
-		dataServers.add(new DataServer(pepino));
+		dataServers.add(new DataServer(jurupoca, TERABYTE));
+		dataServers.add(new DataServer(cherne, TERABYTE));
+		dataServers.add(new DataServer(pepino, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence, timeToDelete);

@@ -23,15 +23,17 @@ import simulation.beefs.model.ReplicatedFile;
 
 public class KindTest {
 	
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	
 	@Test
 	public void reuse_already_allocated_data_servers_when_they_are_awake() {
 		Machine machine1 = createMockMachine(State.ACTIVE, Time.GENESIS);
 		Machine machine2 = createMockMachine(State.ACTIVE, Time.GENESIS);
 		
-		DataServer primary = new DataServer(machine1);
+		DataServer primary = new DataServer(machine1, TERABYTE);
 		
 		Set<DataServer> replicas = new HashSet<DataServer>();
-		replicas.add(new DataServer(machine2));
+		replicas.add(new DataServer(machine2, TERABYTE));
 		
 		Kind kind = new Kind(null);
 		
@@ -49,15 +51,15 @@ public class KindTest {
 		Machine machine2 = createMockMachine(State.SLEEPING, Time.GENESIS); 
 		Machine machine3 = createMockMachine(State.ACTIVE, Time.GENESIS); 
 				
-		DataServer primary = new DataServer(machine1);
+		DataServer primary = new DataServer(machine1, TERABYTE);
 		
 		Set<DataServer> originalReplicas = new HashSet<DataServer>();
-		originalReplicas.add(new DataServer(machine2));
+		originalReplicas.add(new DataServer(machine2, TERABYTE));
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
 		
 		Set<DataServer> availableServers = new HashSet<DataServer>(originalReplicas);
-		DataServer ds3 = new DataServer(machine3);
+		DataServer ds3 = new DataServer(machine3, TERABYTE);
 		availableServers.add(ds3);
 		
 		Kind kind = new Kind(availableServers);
@@ -75,17 +77,17 @@ public class KindTest {
 		Machine machine3 = createMockMachine(State.SLEEPING, Time.GENESIS);
 		Machine machine4 = createMockMachine(State.SLEEPING, new Time(11, Unit.SECONDS));
 				
-		DataServer primary = new DataServer(machine1);
+		DataServer primary = new DataServer(machine1, TERABYTE);
 		
 		Set<DataServer> originalReplicas = new HashSet<DataServer>();
-		originalReplicas.add(new DataServer(machine2));
+		originalReplicas.add(new DataServer(machine2, TERABYTE));
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
 		
 		Set<DataServer> availableServers = new HashSet<DataServer>(originalReplicas);
-		DataServer ds3 = new DataServer(machine3);
+		DataServer ds3 = new DataServer(machine3, TERABYTE);
 		availableServers.add(ds3);
-		availableServers.add(new DataServer(machine4));
+		availableServers.add(new DataServer(machine4, TERABYTE));
 		
 		Kind kind = new Kind(availableServers);
 		
@@ -105,10 +107,10 @@ public class KindTest {
 		
 		Machine machine2 = createMockMachine(State.ACTIVE, new Time(10, Unit.SECONDS)); 
 				
-		DataServer primary = new DataServer(machine1);
+		DataServer primary = new DataServer(machine1, TERABYTE);
 		
 		Set<DataServer> originalReplicas = new HashSet<DataServer>();
-		originalReplicas.add(new DataServer(machine2));
+		originalReplicas.add(new DataServer(machine2, TERABYTE));
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
 		

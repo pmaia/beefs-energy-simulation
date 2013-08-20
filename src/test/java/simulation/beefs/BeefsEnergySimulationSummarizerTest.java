@@ -19,6 +19,8 @@ import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine;
 
 public class BeefsEnergySimulationSummarizerTest {
+	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+
 	@Test
 	public void summarizeTest() {
 		BeefsEnergySimulationSummarizer summarizer = new BeefsEnergySimulationSummarizer();
@@ -28,7 +30,7 @@ public class BeefsEnergySimulationSummarizerTest {
 		Machine machine = new Machine("jurupoca", new Time(900, Unit.SECONDS), new Time(2500, Unit.MILLISECONDS));
 		machine.setIdle(Time.GENESIS, new Time(87300000, Unit.SECONDS));
 		
-		DataServer dataServer = new DataServer(machine);
+		DataServer dataServer = new DataServer(machine, TERABYTE);
 		
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(dataServer);
