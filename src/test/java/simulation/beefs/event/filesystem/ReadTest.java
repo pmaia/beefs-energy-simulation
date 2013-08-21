@@ -28,7 +28,7 @@ import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
 public class ReadTest {
 	
-	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	private static final long TERABYTE = 1024L * 1024 * 1024 * 1024;
 	
 	private final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);
 	private final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);

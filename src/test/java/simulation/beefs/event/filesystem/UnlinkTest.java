@@ -25,7 +25,7 @@ import simulation.beefs.replication.Replicator;
 
 public class UnlinkTest {
 	
-	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	private static final long TERABYTE = 1024L * 1024 * 1024 * 1024;
 	
 	private static final Time TO_SLEEP_TIMEOUT = new Time(15*60, Unit.SECONDS);
 	private static final Time TRANSITION_DURATION = new Time(2500, Unit.MILLISECONDS);

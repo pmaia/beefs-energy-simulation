@@ -23,7 +23,7 @@ import simulation.beefs.model.ReplicatedFile;
 
 public class KindTest {
 	
-	private static final long GIGABYTE = 1024 * 1024 * 1024;
+	private static final long GIGABYTE = 1024L * 1024 * 1024;
 	private static final long TERABYTE = GIGABYTE * 1024;
 	
 	@Test
@@ -39,7 +39,7 @@ public class KindTest {
 		
 		Kind kind = new Kind(null);
 		
-		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, replicas);
+		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, replicas);
 		
 		kind.updateReplicas(file);
 		
@@ -59,7 +59,7 @@ public class KindTest {
 		DataServer ds2 = new DataServer(machine2, TERABYTE);
 		originalReplicas.add(new FileReplica(ds2, GIGABYTE));
 		
-		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
+		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, originalReplicas);
 		
 		Set<DataServer> availableServers = new HashSet<DataServer>();
 		availableServers.add(ds2);
@@ -87,7 +87,7 @@ public class KindTest {
 		DataServer ds2 = new DataServer(machine2, TERABYTE);
 		originalReplicas.add(new FileReplica(ds2, GIGABYTE));
 		
-		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
+		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, originalReplicas);
 		
 		Set<DataServer> availableServers = new HashSet<DataServer>();
 		availableServers.add(ds2);
@@ -119,7 +119,7 @@ public class KindTest {
 		DataServer ds2 = new DataServer(machine2, TERABYTE);
 		originalReplicas.add(new FileReplica(ds2, GIGABYTE));
 		
-		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, originalReplicas);
+		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, originalReplicas);
 		
 		Kind kind = new Kind(null);
 		

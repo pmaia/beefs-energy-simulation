@@ -55,7 +55,7 @@ public class CoLocatedWithSecondaryRandom extends DataPlacement {
 			replicas.add(new FileReplica(ds, 0));
 		}
 
-		return new ReplicatedFile(fileName, primary, replicas);
+		return new ReplicatedFile(fileName, primary, replicationLevel, replicas);
 	}
 
 }

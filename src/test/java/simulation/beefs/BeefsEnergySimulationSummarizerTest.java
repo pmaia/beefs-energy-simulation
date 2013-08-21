@@ -19,7 +19,7 @@ import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine;
 
 public class BeefsEnergySimulationSummarizerTest {
-	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
+	private static final long TERABYTE = 1024L * 1024 * 1024 * 1024;
 
 	@Test
 	public void summarizeTest() {

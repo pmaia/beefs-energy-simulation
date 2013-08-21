@@ -3,20 +3,24 @@ package simulation.beefs.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import manelsim.EventScheduler;
+
 public class ReplicatedFile {
 	
 	private final String fullpath;
 	private final DataServer primary;
+	private final int expectedReplicationLevel;
 	
 	private long size = 0;
 	private long bytesWritten = 0;
 	private boolean replicasAreConsistent = true;
 	private Set<FileReplica> replicas;
 	
-	public ReplicatedFile(String fullpath, DataServer primary, Set<FileReplica> replicas) {
+	public ReplicatedFile(String fullpath, DataServer primary, int expectedReplicationLevel, Set<FileReplica> replicas) {
 		this.fullpath = fullpath;
 		this.primary = primary;
 		this.replicas = replicas;
+		this.expectedReplicationLevel = expectedReplicationLevel;
 	}
 	
 	public void delete() {
@@ -33,7 +37,7 @@ public class ReplicatedFile {
 	
 	public void write(long bytes, long currentFileSize) {
 		if(primary.freeSpace() < bytes) {
-			String msg = String.format("write failed in %s (%d %d)", primary.getHost().getName(), bytes, primary.freeSpace());
+			String msg = String.format("disk full: write failed in %s (%d %d) - %s", primary.getHost().getName(), bytes, primary.freeSpace(), EventScheduler.now());
 			System.out.println(msg);
 			return;
 		}
@@ -66,6 +70,14 @@ public class ReplicatedFile {
 	
 	public boolean areReplicasConsistent() {
 		return replicasAreConsistent;
+	}
+	
+	public int actualReplicationLevel() {
+		return replicas.size();
+	}
+
+	public int expectedReplicationLevel() {
+		return expectedReplicationLevel;
 	}
 
 }
