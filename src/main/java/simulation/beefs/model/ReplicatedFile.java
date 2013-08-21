@@ -32,6 +32,11 @@ public class ReplicatedFile {
 	}
 	
 	public void write(long bytes, long currentFileSize) {
+		if(primary.freeSpace() < bytes) {
+			String msg = String.format("write failed in %s (%d %d)", primary.getHost().getName(), bytes, primary.freeSpace());
+			System.out.println(msg);
+			return;
+		}
 		primary.useDisk(bytes); //i am considering that every write is a append. this is the worst case scenario.
 		
 		size = currentFileSize + bytes;
