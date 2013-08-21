@@ -46,12 +46,11 @@ public class WriteTest {
 		jurupoca.setIdle(Time.GENESIS, ONE_MINUTE);
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
-		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
+		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		client = new FileSystemClient(jurupoca, metadataServer, true);		
 	}
 	

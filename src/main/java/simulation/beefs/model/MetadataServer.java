@@ -9,7 +9,6 @@ import java.util.Set;
 
 import manelsim.EventScheduler;
 import manelsim.Time;
-import simulation.beefs.event.filesystem.DeleteFileReplicas;
 import simulation.beefs.event.filesystem.UpdateFileReplicas;
 import simulation.beefs.placement.DataPlacement;
 import simulation.beefs.replication.Replicator;
@@ -24,8 +23,6 @@ public class MetadataServer {
 	
 	private final Time timeToCoherence;
 	
-	private final Time timeToDelete;
-
 	private final Map<String, ReplicatedFile> files = new HashMap<String, ReplicatedFile>();
 	
 	private final Map<String, UpdateFileReplicas> scheduledUpdateReplicasEvents = new HashMap<String, UpdateFileReplicas>();
@@ -34,7 +31,7 @@ public class MetadataServer {
 	private final Map<String, DataServer> dataServerByHost = new HashMap<String, DataServer>();
 
 	public MetadataServer(Set<DataServer> dataServers, DataPlacement dataPlacementStrategy, 
-			Replicator replicator, int replicationLevel, Time timeToCoherence, Time timeToDelete) {
+			Replicator replicator, int replicationLevel, Time timeToCoherence) {
 		
 		for(DataServer dataServer : dataServers) {
 			dataServerByHost.put(dataServer.getHost().getName(), dataServer);
@@ -44,7 +41,6 @@ public class MetadataServer {
 		this.replicator = replicator;
 		this.replicationLevel = replicationLevel;
 		this.timeToCoherence = timeToCoherence;
-		this.timeToDelete = timeToDelete;
 	}
 	
 	public void close(String filePath) {
@@ -79,10 +75,8 @@ public class MetadataServer {
 	
 	public void delete(String filePath) {
 		ReplicatedFile file = files.remove(filePath);
-		//FIXME Patrick: tenho que fazer aqui em file.getPrimary() o mesmo que eu fizer em DeleteFileReplicas.process()
-		if(file != null && file.replicas().size() > 0) {
-			Time now = EventScheduler.now();
-			EventScheduler.schedule(new DeleteFileReplicas(now.plus(timeToDelete), file));
+		if(file != null) {
+			file.delete();
 		}
 	}
 

@@ -106,14 +106,12 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 			Integer replicationLevel = Integer.valueOf(config.getProperty(BeefsEnergySimulationConstants.REPLICATION_LEVEL));
 			Time timeToCoherence = 
 					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_COHERENCE)), Unit.SECONDS);
-			Time timeToDelete = 
-					new Time(Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.TIME_TO_DELETE_REPLICAS)), Unit.SECONDS);
 
 			String replicatorName = config.getProperty(BeefsEnergySimulationConstants.REPLICATOR); 
 			Replicator replicator = Replicator.newReplicator(replicatorName, dataServers());
 
 			_metadataServer = 
-					new MetadataServer(dataServers(), placementPolicy, replicator, replicationLevel, timeToCoherence, timeToDelete);
+					new MetadataServer(dataServers(), placementPolicy, replicator, replicationLevel, timeToCoherence);
 		}
 		return _metadataServer;
 	}

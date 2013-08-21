@@ -41,7 +41,7 @@ public class FileSystemTraceEventSourceTest {
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, Time.GENESIS, Time.GENESIS);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, Time.GENESIS);
 		client = new FileSystemClient(jurupoca, metadataServer, true);
 	}
 

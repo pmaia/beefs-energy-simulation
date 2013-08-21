@@ -26,11 +26,6 @@ import simulation.beefs.replication.Faithful;
 import simulation.beefs.replication.Replicator;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
-/**
- * 
- * @author Patrick Maia
- *
- */
 public class ReadTest {
 	
 	private static final long TERABYTE = 1024 * 1024 * 1024 * 1024;
@@ -53,10 +48,9 @@ public class ReadTest {
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
-		Time timeToDelete = new Time(5 * 60, Unit.SECONDS);
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
+		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		
 		client = new FileSystemClient(jurupoca, metadataServer, true);
 	}

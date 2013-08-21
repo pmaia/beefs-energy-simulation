@@ -35,7 +35,6 @@ public class CloseTest {
 	private EventSourceMultiplexer eventSourceMock;
 	private Time closeTime = Time.GENESIS;
 	private Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
-	private Time timeToDelete  = new Time(5 * 60, Unit.SECONDS);
 	
 	@Before
 	public void setup() {
@@ -51,7 +50,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		client.createOrOpen(filePath);
@@ -73,7 +72,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(pepino, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence, timeToDelete);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		client.createOrOpen(filePath);
@@ -95,7 +94,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(pepino, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence, timeToDelete);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
@@ -118,7 +117,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence, timeToDelete);
+		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		replay(eventSourceMock);
