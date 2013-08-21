@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import simulation.beefs.model.DataServer;
+import simulation.beefs.model.FileReplica;
 import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.ReplicatedFile;
 
@@ -32,8 +33,12 @@ public class Random extends DataPlacement {
 			}
 		}
 		
-		return new ReplicatedFile(fileName, primary, secondaries);
-		
+		Set<FileReplica> replicas = new HashSet<FileReplica>();
+		for(DataServer ds : secondaries) {
+			replicas.add(new FileReplica(ds, 0));
+		}
+
+		return new ReplicatedFile(fileName, primary, replicas);
 	}
 
 }

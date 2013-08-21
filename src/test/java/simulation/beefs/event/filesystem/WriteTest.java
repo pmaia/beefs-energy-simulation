@@ -69,7 +69,7 @@ public class WriteTest {
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
 
-		assertEquals(2048L, file.getSize());
+		assertEquals(2048L + 1024, file.size());
 		assertFalse(file.areReplicasConsistent());
 	}
 	

@@ -65,28 +65,12 @@ public class ReadTest {
 	public void testFileSizeIsTheSameAfterRead() {
 		String filePath = "/home/patrick/cruzeiro.txt";
 		ReplicatedFile file = client.createOrOpen(filePath);
-		file.setSize(1024);
+		file.write(0, 1024);
 		
 		Read read = new Read(client, Time.GENESIS, new Time(5, Unit.MILLISECONDS), filePath, 10);
 		read.process();
 		
-		assertEquals(1024, file.getSize());
-	}
-	
-	@Test
-	public void testReplicasCoherenceAreTheSameAfterRead() {
-		String filePath = "/home/patrick/cruzeiro.txt";
-		ReplicatedFile file = client.createOrOpen(filePath);
-		file.setSize(1024);
-		file.setReplicasAreConsistent(true);
-		
-		Read read = new Read(client, Time.GENESIS, new Time(5, Unit.MILLISECONDS), filePath, 10);
-		read.process();
-		assertEquals(true, file.areReplicasConsistent());
-		
-		file.setReplicasAreConsistent(false);
-		read.process();
-		assertEquals(false, file.areReplicasConsistent());
+		assertEquals(1024, file.size());
 	}
 	
 	/*

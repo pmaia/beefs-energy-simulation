@@ -25,5 +25,5 @@ public abstract class Replicator {
 		return replicator;
 	}
 	
-	public abstract ReplicatedFile updateReplicas(ReplicatedFile file);
+	public abstract void updateReplicas(ReplicatedFile file);
 }

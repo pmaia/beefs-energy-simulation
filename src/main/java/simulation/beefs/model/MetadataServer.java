@@ -50,16 +50,16 @@ public class MetadataServer {
 	public void close(String filePath) {
 		ReplicatedFile file = files.get(filePath);
 		
-		if(file != null && !file.areReplicasConsistent() && file.getSecondaries().size() > 0) {
+		if(file != null && !file.areReplicasConsistent() && file.replicas().size() > 0) {
 			cleanUpProcessedEvents();
 			Time now = EventScheduler.now();
-			UpdateFileReplicas old = scheduledUpdateReplicasEvents.get(file.getFullPath());
+			UpdateFileReplicas old = scheduledUpdateReplicasEvents.get(file.fullPath());
 			if(old != null) {
 				EventScheduler.cancel(old);
 			}
 			UpdateFileReplicas updateFileReplicas = new UpdateFileReplicas(now.plus(timeToCoherence), file, this);
 			EventScheduler.schedule(updateFileReplicas);
-			scheduledUpdateReplicasEvents.put(file.getFullPath(), updateFileReplicas);
+			scheduledUpdateReplicasEvents.put(file.fullPath(), updateFileReplicas);
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class MetadataServer {
 	public void delete(String filePath) {
 		ReplicatedFile file = files.remove(filePath);
 		//FIXME Patrick: tenho que fazer aqui em file.getPrimary() o mesmo que eu fizer em DeleteFileReplicas.process()
-		if(file != null && file.getSecondaries().size() > 0) {
+		if(file != null && file.replicas().size() > 0) {
 			Time now = EventScheduler.now();
 			EventScheduler.schedule(new DeleteFileReplicas(now.plus(timeToDelete), file));
 		}

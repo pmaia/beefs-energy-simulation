@@ -99,7 +99,7 @@ public class CloseTest {
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
 		ReplicatedFile file = client.createOrOpen(filePath);
-		file.setReplicasAreConsistent(false);
+		file.write(10, 1000);
 		
 		eventSourceMock.addNewEvent(new UpdateFileReplicas(closeTime.plus(timeToCoherence), file, metadataServer));
 		replay(eventSourceMock);

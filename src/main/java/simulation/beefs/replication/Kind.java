@@ -5,6 +5,7 @@ import java.util.Set;
 
 import manelsim.EventScheduler;
 import simulation.beefs.model.DataServer;
+import simulation.beefs.model.FileReplica;
 import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.ReplicatedFile;
 
@@ -22,19 +23,29 @@ public class Kind extends Replicator {
 	}
 
 	@Override
-	public ReplicatedFile updateReplicas(ReplicatedFile file) {
-		if(!file.getPrimary().getHost().isReachable()) {
-			file.getPrimary().getHost().wakeOnLan(EventScheduler.now());
+	public void updateReplicas(ReplicatedFile file) {
+		if(!file.primary().getHost().isReachable()) {
+			file.primary().getHost().wakeOnLan(EventScheduler.now());
 		}
-		Set<DataServer> newDataServers = new HashSet<DataServer>();
-		for(DataServer ds : file.getSecondaries()) {
-			if(ds.getHost().getState().equals(State.SLEEPING)) {
-				newDataServers.add(giveMeOneAwakeDataServer(newDataServers));
+		
+		Set<DataServer> exceptions = new HashSet<DataServer>();
+		Set<FileReplica> newReplicas = new HashSet<FileReplica>();
+		
+		for(FileReplica replica : file.replicas()) {
+			exceptions.add(replica.dataServer());
+			replica.delete();
+			
+			DataServer newDataServer = null;
+			if(replica.dataServer().getHost().getState().equals(State.SLEEPING)) {
+				newDataServer = giveMeOneAwakeDataServer(exceptions);
+				exceptions.add(newDataServer);
 			} else {
-				newDataServers.add(ds);
+				newDataServer = replica.dataServer();
 			}
+			
+			newReplicas.add(new FileReplica(newDataServer, file.size()));
 		}
-		return new ReplicatedFile(file.getFullPath(), file.getPrimary(), newDataServers);
+		file.updateReplicas(newReplicas);
 	}
 
 	private DataServer giveMeOneAwakeDataServer(Set<DataServer> exceptions) {

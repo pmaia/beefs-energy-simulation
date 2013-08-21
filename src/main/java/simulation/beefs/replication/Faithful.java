@@ -1,7 +1,10 @@
 package simulation.beefs.replication;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import manelsim.EventScheduler;
-import simulation.beefs.model.DataServer;
+import simulation.beefs.model.FileReplica;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.ReplicatedFile;
 
@@ -13,12 +16,15 @@ import simulation.beefs.model.ReplicatedFile;
 public class Faithful extends Replicator {
 
 	@Override
-	public ReplicatedFile updateReplicas(ReplicatedFile file) {
-		wakeUpIfSleeping(file.getPrimary().getHost());
-		for(DataServer replicaDataServer : file.getSecondaries()) {
-			wakeUpIfSleeping(replicaDataServer.getHost());
+	public void updateReplicas(ReplicatedFile file) {
+		Set<FileReplica> newReplicas = new HashSet<FileReplica>();
+		wakeUpIfSleeping(file.primary().getHost());
+		for(FileReplica replica : file.replicas()) {
+			replica.delete();
+			wakeUpIfSleeping(replica.dataServer().getHost());
+			newReplicas.add(new FileReplica(replica.dataServer(), file.size()));
 		}
-		return file;
+		file.updateReplicas(newReplicas);
 	}
 	
 	private void wakeUpIfSleeping(Machine machine) {
