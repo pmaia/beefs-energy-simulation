@@ -38,7 +38,7 @@ public class DataServer {
 	private void notifyChange() {
 		numberOfChanges++;
 		if(numberOfChanges > NUMBER_OF_CHANGES_BEFORE_LOG) {
-			String msg = String.format("%s\t%d\t%d", host.getName(), EventScheduler.now(), freeSpace());
+			String msg = String.format("%s\t%s\t%d", host.getName(), EventScheduler.now(), freeSpace());
 			System.out.println(msg);
 			numberOfChanges = 0;
 		}
