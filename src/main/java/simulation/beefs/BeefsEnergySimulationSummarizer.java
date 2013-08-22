@@ -15,32 +15,9 @@ import simulation.beefs.model.Machine.State;
 
 public class BeefsEnergySimulationSummarizer implements Summarizer {
 	
-	/**
-	 * Combines the information about user activity and file system activity. 
-	 * The result of calling this method is a list of intervals in which a machine was:
-	 * <li>Active</li>
-	 * <li>Idle</li>
-	 * <li>Sleeping</li>
-	 * <li>Transitioning</li>
-	 * <li>Active and read operations happened</li>
-	 * <li>Idle and read operations happened</li>
-	 * <li>Active and write operations happened</li>
-	 * <li>Idle and write operations happened</li>
-	 * <li>Active and both read and write operations happened</li>
-	 * <li>Idle and both read and write operations happened</li> 
-	 */
 	private List<EnergyStateInterval> combine(DataServer dataServer) { 
-		// convert MachineStateIntervals to EnergyStateIntervals
 		List<EnergyStateInterval> combinedEnergyStatesIntervals = 
 				convertStates(dataServer.getHost().getStateIntervals());
-		
-		// combine writes
-//		Iterator<TimeInterval> writesIterator = dataServer.getWriteIntervals().iterator();
-//		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), writesIterator, false);
-
-		// combine reads 
-//		Iterator<TimeInterval> readsIterator = dataServer.getReadIntervals().iterator();
-//		combinedEnergyStatesIntervals = combine(combinedEnergyStatesIntervals.iterator(), readsIterator, true);
 		
 		return combinedEnergyStatesIntervals;
 	}
@@ -85,10 +62,11 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 					(EnergyConsumptionModel)context.get(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL);
 			double kWh = energyConsumptionModel.getConsumption(energyStatesIntervals);
 			
-			sb.append(String.format("%s\n\n%f kWh\n%d transitions\n======================\n", 
+			sb.append(String.format("%s\n\n%f kWh\n%d transitions\n%d free disk space\n======================\n", 
 					dataServer.getHost().getName(), 
 					kWh, 
-					dataServer.getHost().getTransitionIntervals().size()));
+					dataServer.getHost().getTransitionIntervals().size(),
+					dataServer.freeSpace()));
 		}
 		
 		return sb.toString();
