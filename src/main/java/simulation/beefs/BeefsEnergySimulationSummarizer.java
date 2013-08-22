@@ -62,7 +62,7 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 					(EnergyConsumptionModel)context.get(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL);
 			double kWh = energyConsumptionModel.getConsumption(energyStatesIntervals);
 			
-			sb.append(String.format("%s\n\n%f kWh\n%d transitions\n%d free disk space\n======================\n", 
+			sb.append(String.format("$%s\t%f\t%d\t%d\n", 
 					dataServer.getHost().getName(), 
 					kWh, 
 					dataServer.getHost().getTransitionIntervals().size(),

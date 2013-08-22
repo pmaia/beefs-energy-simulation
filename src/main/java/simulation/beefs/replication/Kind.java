@@ -90,7 +90,7 @@ public class Kind extends Replicator {
 		if( unfortunateDataServer != null) {
 			unfortunateDataServer.getHost().wakeOnLan(EventScheduler.now());
 		} else {
-			System.out.println(String.format("all disks full: could not replicate %d bytes - %s", fileSize, EventScheduler.now()));
+			System.out.println(String.format("@all disks full: could not replicate %d bytes - %s", fileSize, EventScheduler.now()));
 		}
 		return unfortunateDataServer;
 	}

@@ -37,7 +37,7 @@ public class ReplicatedFile {
 	
 	public void write(long bytes, long currentFileSize) {
 		if(primary.freeSpace() < bytes) {
-			String msg = String.format("disk full: write failed in %s (%d %d) - %s", primary.getHost().getName(), bytes, primary.freeSpace(), EventScheduler.now());
+			String msg = String.format("%%primary write failed in %s (%d %d) - %s", primary.getHost().getName(), bytes, primary.freeSpace(), EventScheduler.now());
 			System.out.println(msg);
 			return;
 		}
