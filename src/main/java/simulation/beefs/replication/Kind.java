@@ -1,6 +1,9 @@
 package simulation.beefs.replication;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import manelsim.EventScheduler;
@@ -15,14 +18,19 @@ import simulation.beefs.model.ReplicatedFile;
  */
 public class Kind extends Replicator {
 	
-	private final Set<DataServer> dataServers;
+	private final List<DataServer> dataServers;
 	
 	public Kind(Set<DataServer> dataServers) {
-		this.dataServers = dataServers;
+		if(dataServers != null) {
+			this.dataServers = new ArrayList<DataServer>(dataServers);
+		} else {
+			this.dataServers = new ArrayList<DataServer>();
+		}
 	}
 
 	@Override
 	public void updateReplicas(ReplicatedFile file) {
+		Collections.shuffle(dataServers);
 		if(!file.primary().getHost().isReachable()) {
 			file.primary().getHost().wakeOnLan(EventScheduler.now());
 		}
