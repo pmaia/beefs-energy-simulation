@@ -87,11 +87,13 @@ public class Kind extends Replicator {
 		
 		for(DataServer ds : dataServers) {
 			if(!ds.getHost().isReachable()) {
-				if(unfortunateDataServer == null && ds.freeSpace() >= fileSize) {
-					unfortunateDataServer = ds;
-				} else if(ds.getHost().lastTransitionTime().
-						isEarlierThan(unfortunateDataServer.getHost().lastTransitionTime()) && ds.freeSpace() >= fileSize) {
-					unfortunateDataServer = ds;
+				if(ds.freeSpace() >= fileSize) {
+					if(unfortunateDataServer == null) {
+						unfortunateDataServer = ds;
+					} else if(ds.getHost().lastTransitionTime().
+							isEarlierThan(unfortunateDataServer.getHost().lastTransitionTime())) {
+						unfortunateDataServer = ds;
+					}					
 				}
 			}
 		}
