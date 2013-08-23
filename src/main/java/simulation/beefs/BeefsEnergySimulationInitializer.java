@@ -18,6 +18,7 @@ import manelsim.Initializer;
 import manelsim.Time;
 import manelsim.Time.Unit;
 import simulation.beefs.energy.EnergyConsumptionModel;
+import simulation.beefs.event.DataServersSpaceLogger;
 import simulation.beefs.event.filesystem.FileSystemTraceEventSource;
 import simulation.beefs.event.machine.UserActivityTraceEventSource;
 import simulation.beefs.model.DataServer;
@@ -54,6 +55,9 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 		context.add(BeefsEnergySimulationConstants.METADATA_SERVER, metadataServer());
 		context.add(BeefsEnergySimulationConstants.CLIENTS, clients());
 		context.add(BeefsEnergySimulationConstants.ENERGY_CONSUMPTION_MODEL, energyConsumptionModel());
+		
+		Time simulationStart = new Time(Long.parseLong(config.getProperty("simulation_start")), Unit.SECONDS);
+		eventSourceMultiplexer().addNewEvent(new DataServersSpaceLogger(simulationStart, new Time(60*60, Unit.SECONDS), dataServers()));
 
 		return context;
 	}
