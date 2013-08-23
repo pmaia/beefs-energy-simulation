@@ -12,7 +12,6 @@ import simulation.beefs.energy.EnergyStateInterval;
 import simulation.beefs.model.DataServer;
 import simulation.beefs.model.Machine.MachineStateInterval;
 import simulation.beefs.model.Machine.State;
-import simulation.beefs.model.MetadataServer;
 
 public class BeefsEnergySimulationSummarizer implements Summarizer {
 	
@@ -69,8 +68,6 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 					dataServer.getHost().getTransitionIntervals().size(),
 					dataServer.freeSpace()));
 		}
-		
-		sb.append("\n\n=====global min free space " + MetadataServer.minFreeSpace());
 		
 		return sb.toString();
 	} 
