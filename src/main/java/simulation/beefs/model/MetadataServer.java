@@ -1,6 +1,7 @@
 package simulation.beefs.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ public class MetadataServer {
 
 	// Patrick: I'm considering that there is just one DataServer per machine.
 	private final Map<String, DataServer> dataServerByHost = new HashMap<String, DataServer>();
+	
+	private static DataServer ds1, ds2, ds3, ds4, ds5, ds6, ds7, ds8, ds9, ds10, ds11;
+	
+	private static long minFreeSpace = Long.MAX_VALUE;
 
 	public MetadataServer(Set<DataServer> dataServers, DataPlacement dataPlacementStrategy, 
 			Replicator replicator, int replicationLevel, Time timeToCoherence) {
@@ -41,6 +46,20 @@ public class MetadataServer {
 		this.replicator = replicator;
 		this.replicationLevel = replicationLevel;
 		this.timeToCoherence = timeToCoherence;
+		
+		Iterator<DataServer> dsIterator = dataServers.iterator();
+		
+		ds1 = dsIterator.next();
+		ds2 = dsIterator.next();
+		ds3 = dsIterator.next();
+		ds4 = dsIterator.next();
+		ds5 = dsIterator.next();
+		ds6 = dsIterator.next();
+		ds7 = dsIterator.next();
+		ds8 = dsIterator.next();
+		ds9 = dsIterator.next();
+		ds10 = dsIterator.next();
+		ds11 = dsIterator.next();
 	}
 	
 	public void close(String filePath) {
@@ -100,6 +119,17 @@ public class MetadataServer {
 	
 	public DataServer getDataServer(String host) {
 		return dataServerByHost.get(host);
+	}
+	
+	public static void notifyDiskUseChange() {
+		long currentFreeSpace = ds1.freeSpace() + ds2.freeSpace() +ds3.freeSpace() +ds4.freeSpace() +ds5.freeSpace() +ds6.freeSpace() +ds7.freeSpace() +
+				ds8.freeSpace() +ds9.freeSpace() +ds10.freeSpace() +ds11.freeSpace();
+		
+		minFreeSpace = Math.min(minFreeSpace, currentFreeSpace);
+	}
+	
+	public static long minFreeSpace() {
+		return minFreeSpace;
 	}
 
 }
