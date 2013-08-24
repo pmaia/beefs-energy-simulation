@@ -38,7 +38,7 @@ public class MachineTransitionsFromGoingSleepTest {
 		machineGoingSleep = new Machine("jurupoca", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		machineGoingSleep.setIdle(Time.GENESIS, TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		machineGoingSleep.setSleeping(TO_SLEEP_TIMEOUT, ONE_MINUTE);
-		assertEquals(State.GOING_SLEEP, machineGoingSleep.getState());
+		assertEquals(State.GOING_SLEEP, machineGoingSleep.state());
 	}
 
 	@Test(expected=IllegalStateException.class)
@@ -49,7 +49,7 @@ public class MachineTransitionsFromGoingSleepTest {
 	@Test
 	public void testTransitionToSleep() {
 		machineGoingSleep.setSleeping(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION), ONE_MINUTE);
-		assertEquals(State.SLEEPING, machineGoingSleep.getState());
+		assertEquals(State.SLEEPING, machineGoingSleep.state());
 	}
 
 	@Test(expected=IllegalStateException.class)

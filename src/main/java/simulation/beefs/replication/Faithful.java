@@ -18,10 +18,10 @@ public class Faithful extends Replicator {
 	@Override
 	public void updateReplicas(ReplicatedFile file) {
 		Set<FileReplica> newReplicas = new HashSet<FileReplica>();
-		wakeUpIfSleeping(file.primary().getHost());
+		wakeUpIfSleeping(file.primary().host());
 		for(FileReplica replica : file.replicas()) {
 			replica.delete();
-			wakeUpIfSleeping(replica.dataServer().getHost());
+			wakeUpIfSleeping(replica.dataServer().host());
 			newReplicas.add(new FileReplica(replica.dataServer(), file.size()));
 		}
 		file.updateReplicas(newReplicas);

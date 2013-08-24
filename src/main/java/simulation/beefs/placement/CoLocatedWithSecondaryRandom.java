@@ -23,7 +23,7 @@ public class CoLocatedWithSecondaryRandom extends DataPlacement {
 		Set<DataServer> secondaries;
 		
 		DataServer colocatedDataServer = 
-			client.getMetadataServer().getDataServer(client.getHost().getName());
+			client.metadataServer().getDataServer(client.host().name());
 		
 		if(colocatedDataServer != null) {
 			Set<DataServer> copyOfAvailableDataServers = 

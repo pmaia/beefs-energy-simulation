@@ -48,13 +48,13 @@ public class MachineTransitionsFromBootstrapTest {
 		Time idlenessDuration = new Time(10*60, Unit.SECONDS);
 		machine.setIdle(Time.GENESIS, idlenessDuration );
 
-		assertEquals(State.IDLE, machine.getState());
-		assertEquals(0, machine.getUserActivityIntervals().size());
-		assertEquals(0, machine.getSleepIntervals().size());
-		assertEquals(0, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.IDLE, machine.state());
+		assertEquals(0, machine.userActivityIntervals().size());
+		assertEquals(0, machine.sleepIntervals().size());
+		assertEquals(0, machine.transitionIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		TimeInterval expectedInterval = new TimeInterval(Time.GENESIS, idlenessDuration);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 	}
 	
 	@Test
@@ -62,30 +62,30 @@ public class MachineTransitionsFromBootstrapTest {
 		Time idlenessDuration = new Time(20*60, Unit.SECONDS);
 		machine.setIdle(Time.GENESIS, idlenessDuration);
 
-		assertEquals(State.IDLE, machine.getState());
-		assertEquals(0, machine.getUserActivityIntervals().size());
-		assertEquals(0, machine.getSleepIntervals().size());
-		assertEquals(0, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.IDLE, machine.state());
+		assertEquals(0, machine.userActivityIntervals().size());
+		assertEquals(0, machine.sleepIntervals().size());
+		assertEquals(0, machine.transitionIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		TimeInterval expectedInterval = new TimeInterval(Time.GENESIS, TO_SLEEP_TIMEOUT);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		
 		EventScheduler.start();
 		
 		assertEquals(2, EventScheduler.processCount());
-		assertEquals(State.SLEEPING, machine.getState());
-		assertEquals(0, machine.getUserActivityIntervals().size());
-		assertEquals(1, machine.getSleepIntervals().size());
-		assertEquals(1, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.SLEEPING, machine.state());
+		assertEquals(0, machine.userActivityIntervals().size());
+		assertEquals(1, machine.sleepIntervals().size());
+		assertEquals(1, machine.transitionIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		
 		expectedInterval = new TimeInterval(Time.GENESIS, TO_SLEEP_TIMEOUT);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		expectedInterval = new TimeInterval(TO_SLEEP_TIMEOUT, TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION));
-		assertTrue(machine.getTransitionIntervals().contains(expectedInterval));
+		assertTrue(machine.transitionIntervals().contains(expectedInterval));
 		//must sleep up to the end of the original idlenessDuration (20 minutes)
 		expectedInterval = new TimeInterval(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION), idlenessDuration); 
-		assertTrue(machine.getSleepIntervals().contains(expectedInterval));
+		assertTrue(machine.sleepIntervals().contains(expectedInterval));
 	}
 	
 	@Test
@@ -97,29 +97,29 @@ public class MachineTransitionsFromBootstrapTest {
 		Time idlenessDuration = TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION.minus(new Time(1, Unit.MICROSECONDS)));
 		machine.setIdle(Time.GENESIS, idlenessDuration);
 		
-		assertEquals(State.IDLE, machine.getState());
-		assertEquals(0, machine.getUserActivityIntervals().size());
-		assertEquals(0, machine.getSleepIntervals().size());
-		assertEquals(0, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.IDLE, machine.state());
+		assertEquals(0, machine.userActivityIntervals().size());
+		assertEquals(0, machine.sleepIntervals().size());
+		assertEquals(0, machine.transitionIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		TimeInterval expectedInterval = new TimeInterval(Time.GENESIS, TO_SLEEP_TIMEOUT);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		
 		EventScheduler.start();
 		
 		assertEquals(2, EventScheduler.processCount());
-		assertEquals(State.SLEEPING, machine.getState());
-		assertEquals(0, machine.getUserActivityIntervals().size());
-		assertEquals(1, machine.getSleepIntervals().size());
-		assertEquals(1, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.SLEEPING, machine.state());
+		assertEquals(0, machine.userActivityIntervals().size());
+		assertEquals(1, machine.sleepIntervals().size());
+		assertEquals(1, machine.transitionIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		
 		expectedInterval = new TimeInterval(Time.GENESIS, TO_SLEEP_TIMEOUT);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		expectedInterval = new TimeInterval(TO_SLEEP_TIMEOUT, TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION));
-		assertTrue(machine.getTransitionIntervals().contains(expectedInterval));
+		assertTrue(machine.transitionIntervals().contains(expectedInterval));
 		expectedInterval = new TimeInterval(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION), 
 				TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION));
-		assertTrue(machine.getSleepIntervals().contains(expectedInterval));
+		assertTrue(machine.sleepIntervals().contains(expectedInterval));
 	}
 }

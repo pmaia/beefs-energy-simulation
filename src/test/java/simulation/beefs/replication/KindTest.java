@@ -132,7 +132,7 @@ public class KindTest {
 		boolean reachable = state.equals(State.IDLE) || state.equals(State.ACTIVE);
 		
 		Machine machine = createMock(Machine.class);
-		expect(machine.getState()).andStubReturn(state);
+		expect(machine.state()).andStubReturn(state);
 		expect(machine.lastTransitionTime()).andStubReturn(lastTransition);
 		expect(machine.isReachable()).andStubReturn(reachable);
 		machine.wakeOnLan(Time.GENESIS);

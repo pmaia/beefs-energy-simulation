@@ -39,7 +39,7 @@ public class MachineTransitionsFromWakingUpToActiveTest {
 		machineWakingUpToActive.setSleeping(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION), 
 				ONE_MINUTE.minus(TRANSITION_DURATION));
 		machineWakingUpToActive.setActive(TO_SLEEP_TIMEOUT.plus(ONE_MINUTE), ONE_MINUTE);
-		assertEquals(State.WAKING_UP, machineWakingUpToActive.getState());
+		assertEquals(State.WAKING_UP, machineWakingUpToActive.state());
 	}
 
 	/*
@@ -66,7 +66,7 @@ public class MachineTransitionsFromWakingUpToActiveTest {
 	public void testTransitionToActiveOnExpectedTime() {
 		machineWakingUpToActive.setActive(TO_SLEEP_TIMEOUT.plus(ONE_MINUTE.plus(TRANSITION_DURATION)), ONE_MINUTE);
 		assertEquals(TRANSITION_DURATION, machineWakingUpToActive.currentDelay());
-		assertEquals(State.ACTIVE, machineWakingUpToActive.getState());
+		assertEquals(State.ACTIVE, machineWakingUpToActive.state());
 	}
 	
 	@Test
@@ -74,7 +74,7 @@ public class MachineTransitionsFromWakingUpToActiveTest {
 		int before = eventsMultiplexer.queueSize();
 		machineWakingUpToActive.wakeOnLan(TO_SLEEP_TIMEOUT.plus(ONE_MINUTE).plus(ONE_SECOND)); // this must be innocuous
 		assertEquals(before, eventsMultiplexer.queueSize());
-		assertEquals(State.WAKING_UP, machineWakingUpToActive.getState());
+		assertEquals(State.WAKING_UP, machineWakingUpToActive.state());
 	}
 
 }

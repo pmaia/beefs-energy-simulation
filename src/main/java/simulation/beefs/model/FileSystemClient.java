@@ -47,10 +47,10 @@ public class FileSystemClient {
 			ReplicatedFile file = createOrOpen(filePath);
 		
 			DataServer primary = file.primary();
-			if(!primary.getHost().isReachable() && wakeOnLan){
-				primary.getHost().wakeOnLan(begin);
+			if(!primary.host().isReachable() && wakeOnLan){
+				primary.host().wakeOnLan(begin);
 				
-				Time delta = primary.getHost().getTransitionDuration().plus(ONE_SECOND);
+				Time delta = primary.host().transitionDuration().plus(ONE_SECOND);
 				EventScheduler.schedule(
 						new Read(this, begin.plus(delta), duration, filePath, bytesTransfered, false));
 			} else {
@@ -66,12 +66,12 @@ public class FileSystemClient {
 			ReplicatedFile replicatedFile = createOrOpen(filePath);
 			
 			DataServer primary = replicatedFile.primary();
-			if(primary.getHost().isReachable()) {
+			if(primary.host().isReachable()) {
 				replicatedFile.write(bytesTransfered, fileSize);
 			} else if(wakeOnLan) {
-				primary.getHost().wakeOnLan(begin);
+				primary.host().wakeOnLan(begin);
 				
-				Time delta = primary.getHost().getTransitionDuration().plus(ONE_SECOND);
+				Time delta = primary.host().transitionDuration().plus(ONE_SECOND);
 				EventScheduler.schedule(
 						new Write(this, begin.plus(delta), duration, filePath, bytesTransfered, fileSize, false));
 			} else {
@@ -80,11 +80,11 @@ public class FileSystemClient {
 		}
 	}
 	
-	public MetadataServer getMetadataServer() {
+	public MetadataServer metadataServer() {
 		return metadataServer;
 	}
 
-	public Machine getHost() {
+	public Machine host() {
 		return host;
 	}
 

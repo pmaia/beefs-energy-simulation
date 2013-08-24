@@ -51,16 +51,16 @@ public class MachineTransitionsFromIdleTest {
 		Time activityDuration = new Time(2, Unit.SECONDS);
 		machine.setActive(IDLENESS_DURATION, activityDuration);
 		
-		assertEquals(State.ACTIVE, machine.getState());
-		assertEquals(0, machine.getSleepIntervals().size());
-		assertEquals(0, machine.getTransitionIntervals().size());
-		assertEquals(1, machine.getUserActivityIntervals().size());
-		assertEquals(1, machine.getUserIdlenessIntervals().size());
+		assertEquals(State.ACTIVE, machine.state());
+		assertEquals(0, machine.sleepIntervals().size());
+		assertEquals(0, machine.transitionIntervals().size());
+		assertEquals(1, machine.userActivityIntervals().size());
+		assertEquals(1, machine.userIdlenessIntervals().size());
 		
 		TimeInterval expectedInterval = new TimeInterval(Time.GENESIS, IDLENESS_DURATION);
-		assertTrue(machine.getUserIdlenessIntervals().contains(expectedInterval));
+		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		expectedInterval = new TimeInterval(IDLENESS_DURATION, IDLENESS_DURATION.plus(activityDuration));
-		assertTrue(machine.getUserActivityIntervals().contains(expectedInterval));
+		assertTrue(machine.userActivityIntervals().contains(expectedInterval));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -84,7 +84,7 @@ public class MachineTransitionsFromIdleTest {
 		//this transition is legal because the machine current idleness duration is greater than TO_SLEEP_TIMEOUT
 		machine.setSleeping(TO_SLEEP_TIMEOUT, new Time(5*60, Unit.SECONDS));
 		
-		assertEquals(State.GOING_SLEEP, machine.getState());
+		assertEquals(State.GOING_SLEEP, machine.state());
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

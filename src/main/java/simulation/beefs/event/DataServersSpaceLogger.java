@@ -19,7 +19,7 @@ public class DataServersSpaceLogger extends RepeatableEvent {
 	@Override
 	public void work() {
 		for(DataServer ds : dataServers) {
-			System.out.println(String.format("#%s\t%s\t%d", EventScheduler.now(), ds.getHost().getName(), ds.freeSpace()));
+			System.out.println(String.format("#%s\t%s\t%d", EventScheduler.now(), ds.host().name(), ds.freeSpace()));
 		}
 	}
 

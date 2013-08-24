@@ -12,7 +12,7 @@ public class Read extends MachineDelaybleEvent {
 	private final Time duration;
 
 	public Read(FileSystemClient client, Time scheduledTime, Time duration, String filePath, long bytesTransfered, boolean delayable) {
-		super(client.getHost(), scheduledTime, delayable);
+		super(client.host(), scheduledTime, delayable);
 		
 		this.duration = duration;
 		this.client = client;

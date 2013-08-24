@@ -88,7 +88,7 @@ public class WriteTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
@@ -102,7 +102,7 @@ public class WriteTest {
 		write.process();
 		
 		// check if machine's status is waking up
-		assertEquals(State.WAKING_UP, jurupoca.getState());
+		assertEquals(State.WAKING_UP, jurupoca.state());
 		
 		// check if a new Write with the same parameters but different time was scheduled
 		Time theTimeJurupocaMustWakeUp = aTimeJurupocaIsSleeping.plus(TRANSITION_DURATION);
@@ -116,7 +116,7 @@ public class WriteTest {
 		assertTrue(eventsMultiplexer.contains(write));
 		
 		EventScheduler.start(); // consumes the UserIdleness scheduled by the call to wakeOnLan
-		assertEquals(State.IDLE, jurupoca.getState());
+		assertEquals(State.IDLE, jurupoca.state());
 		
 		assertEquals(0, client.writesWhileClientSleeping());
 	}
@@ -137,7 +137,7 @@ public class WriteTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
@@ -153,7 +153,7 @@ public class WriteTest {
 		write.process();
 		
 		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
 		assertEquals(1, otherClient.writesWhileDataServerSleeping());
@@ -174,7 +174,7 @@ public class WriteTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		int queueSizeBefore = eventsMultiplexer.queueSize();
 		
@@ -185,7 +185,7 @@ public class WriteTest {
 		write.process();
 
 		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
 		assertEquals(1, client.writesWhileClientSleeping());

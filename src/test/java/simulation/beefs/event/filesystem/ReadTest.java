@@ -83,7 +83,7 @@ public class ReadTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
@@ -97,7 +97,7 @@ public class ReadTest {
 		read.process();
 		
 		// check if machine's status is waking up
-		assertEquals(State.WAKING_UP, jurupoca.getState());
+		assertEquals(State.WAKING_UP, jurupoca.state());
 		
 		// check if a new Read with the same parameters but different time was scheduled
 		Time theTimeJurupocaMustWakeUp = aTimeJurupocaIsSleeping.plus(TRANSITION_DURATION);
@@ -110,7 +110,7 @@ public class ReadTest {
 		assertTrue(eventsMultiplexer.contains(read));
 		
 		EventScheduler.start(); // consumes the UserIdleness scheduled by the call to wakeOnLan
-		assertEquals(State.IDLE, jurupoca.getState());
+		assertEquals(State.IDLE, jurupoca.state());
 		assertEquals(0, client.readsWhileClientSleeping());
 	}
 	
@@ -130,7 +130,7 @@ public class ReadTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
@@ -146,7 +146,7 @@ public class ReadTest {
 		read.process();
 		
 		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
 		assertEquals(1, otherClient.readsWhileDataServerSleeping());
@@ -167,7 +167,7 @@ public class ReadTest {
 		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
 		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
 		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		
 		int queueSizeBefore = eventsMultiplexer.queueSize();
 		
@@ -178,7 +178,7 @@ public class ReadTest {
 		read.process();
 
 		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.getState());
+		assertEquals(State.SLEEPING, jurupoca.state());
 		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
 		
 		assertEquals(1, client.readsWhileClientSleeping());

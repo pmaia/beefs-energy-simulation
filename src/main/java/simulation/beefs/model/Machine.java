@@ -65,31 +65,31 @@ public class Machine {
 		this.currentState = new Bootstrap();
 	}
 	
-	public String getName() {
+	public String name() {
 		return hostname;
 	}
 
-	public List<TimeInterval> getUserActivityIntervals() {
+	public List<TimeInterval> userActivityIntervals() {
 		State [] states = {State.ACTIVE};
 		return getIntervals(states);
 	}
 	
-	public List<TimeInterval> getUserIdlenessIntervals() {
+	public List<TimeInterval> userIdlenessIntervals() {
 		State [] states = {State.IDLE};
 		return getIntervals(states);
 	}
 
-	public List<TimeInterval> getTransitionIntervals() {
+	public List<TimeInterval> transitionIntervals() {
 		State [] states = {State.GOING_SLEEP, State.WAKING_UP};
 		return getIntervals(states);
 	}
 
-	public List<TimeInterval> getSleepIntervals() {
+	public List<TimeInterval> sleepIntervals() {
 		State [] states = {State.SLEEPING};
 		return getIntervals(states);
 	}
 	
-	public List<MachineStateInterval> getStateIntervals() {
+	public List<MachineStateInterval> stateIntervals() {
 		return new ArrayList<MachineStateInterval>(stateIntervals);
 	}
 	
@@ -114,7 +114,7 @@ public class Machine {
 		return currentState.transitionTime();
 	}
 
-	public Time getTransitionDuration() {
+	public Time transitionDuration() {
 		return transitionDuration;
 	}
 	
@@ -141,7 +141,7 @@ public class Machine {
 		currentState = currentState.wakeOnLan(when);
 	}
 	
-	public State getState() {
+	public State state() {
 		return currentState.state();
 	}
 	

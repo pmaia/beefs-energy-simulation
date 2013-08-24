@@ -31,8 +31,8 @@ public class Kind extends Replicator {
 	@Override
 	public void updateReplicas(ReplicatedFile file) {
 		Collections.shuffle(dataServers);
-		if(!file.primary().getHost().isReachable()) {
-			file.primary().getHost().wakeOnLan(EventScheduler.now());
+		if(!file.primary().host().isReachable()) {
+			file.primary().host().wakeOnLan(EventScheduler.now());
 		}
 		
 		Set<DataServer> exceptions = new HashSet<DataServer>();
@@ -43,7 +43,7 @@ public class Kind extends Replicator {
 			exceptions.add(replica.dataServer());
 			replica.delete();
 			
-			if(replica.dataServer().getHost().isReachable() && replica.dataServer().freeSpace() > file.size()) {
+			if(replica.dataServer().host().isReachable() && replica.dataServer().freeSpace() > file.size()) {
 				newDataServer = replica.dataServer();
 			} else {
 				newDataServer = giveMeOneAwakeDataServer(exceptions, file.size());
@@ -75,7 +75,7 @@ public class Kind extends Replicator {
 
 	private DataServer giveMeOneAwakeDataServer(Set<DataServer> exceptions, long fileSize) {
 		for(DataServer ds : dataServers) {
-			if(ds.getHost().isReachable() && !exceptions.contains(ds) && ds.freeSpace() >= fileSize) {
+			if(ds.host().isReachable() && !exceptions.contains(ds) && ds.freeSpace() >= fileSize) {
 				return ds;
 			}
 		}
@@ -86,19 +86,19 @@ public class Kind extends Replicator {
 		DataServer unfortunateDataServer = null;
 		
 		for(DataServer ds : dataServers) {
-			if(!ds.getHost().isReachable()) {
+			if(!ds.host().isReachable()) {
 				if(ds.freeSpace() >= fileSize) {
 					if(unfortunateDataServer == null) {
 						unfortunateDataServer = ds;
-					} else if(ds.getHost().lastTransitionTime().
-							isEarlierThan(unfortunateDataServer.getHost().lastTransitionTime())) {
+					} else if(ds.host().lastTransitionTime().
+							isEarlierThan(unfortunateDataServer.host().lastTransitionTime())) {
 						unfortunateDataServer = ds;
 					}					
 				}
 			}
 		}
 		if( unfortunateDataServer != null) {
-			unfortunateDataServer.getHost().wakeOnLan(EventScheduler.now());
+			unfortunateDataServer.host().wakeOnLan(EventScheduler.now());
 		} else {
 			System.out.println(String.format("@all disks full: could not replicate %d bytes - %s", fileSize, EventScheduler.now()));
 		}

@@ -75,12 +75,12 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 				InputStream traceStream;
 				for(Machine machine : machines()) {
 					traceStream = 
-							new FileInputStream(new File(tracesDir(), "idleness-" + machine.getName()));
+							new FileInputStream(new File(tracesDir(), "idleness-" + machine.name()));
 					parsers[parserCount++] = new UserActivityTraceEventSource(machine, traceStream, emulationStartTime);
 				}
 				for(FileSystemClient client : clients()) {
 					traceStream = 
-							new FileInputStream(new File(tracesDir(), "fs-" + client.getHost().getName()));
+							new FileInputStream(new File(tracesDir(), "fs-" + client.host().name()));
 					parsers[parserCount++] = new FileSystemTraceEventSource(client, traceStream);
 				}
 

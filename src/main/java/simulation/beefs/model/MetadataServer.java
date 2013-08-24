@@ -34,7 +34,7 @@ public class MetadataServer {
 			Replicator replicator, int replicationLevel, Time timeToCoherence) {
 		
 		for(DataServer dataServer : dataServers) {
-			dataServerByHost.put(dataServer.getHost().getName(), dataServer);
+			dataServerByHost.put(dataServer.host().name(), dataServer);
 		}
 		
 		this.dataPlacement = dataPlacementStrategy;

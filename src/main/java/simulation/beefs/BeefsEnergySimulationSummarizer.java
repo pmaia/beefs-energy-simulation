@@ -17,7 +17,7 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 	
 	private List<EnergyStateInterval> combine(DataServer dataServer) { 
 		List<EnergyStateInterval> combinedEnergyStatesIntervals = 
-				convertStates(dataServer.getHost().getStateIntervals());
+				convertStates(dataServer.host().stateIntervals());
 		
 		return combinedEnergyStatesIntervals;
 	}
@@ -63,9 +63,9 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 			double kWh = energyConsumptionModel.getConsumption(energyStatesIntervals);
 			
 			sb.append(String.format("$%s\t%f\t%d\t%d\n", 
-					dataServer.getHost().getName(), 
+					dataServer.host().name(), 
 					kWh, 
-					dataServer.getHost().getTransitionIntervals().size(),
+					dataServer.host().transitionIntervals().size(),
 					dataServer.freeSpace()));
 		}
 		

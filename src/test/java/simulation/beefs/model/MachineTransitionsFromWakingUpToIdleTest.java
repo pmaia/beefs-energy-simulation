@@ -39,7 +39,7 @@ public class MachineTransitionsFromWakingUpToIdleTest {
 		machineWakingUpToIdle.setSleeping(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION), 
 				ONE_MINUTE.minus(TRANSITION_DURATION));
 		machineWakingUpToIdle.wakeOnLan(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION));
-		assertEquals(State.WAKING_UP, machineWakingUpToIdle.getState());
+		assertEquals(State.WAKING_UP, machineWakingUpToIdle.state());
 	}
 	
 	@Test(expected=IllegalStateException.class)
@@ -57,13 +57,13 @@ public class MachineTransitionsFromWakingUpToIdleTest {
 		int before = eventsMultiplexer.queueSize();
 		machineWakingUpToIdle.wakeOnLan(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION).plus(ONE_SECOND)); // this must be innocuous
 		assertEquals(before, eventsMultiplexer.queueSize());
-		assertEquals(State.WAKING_UP, machineWakingUpToIdle.getState());
+		assertEquals(State.WAKING_UP, machineWakingUpToIdle.state());
 	}
 	
 	@Test
 	public void testTransitionToIdle() {
 		machineWakingUpToIdle.setIdle(TO_SLEEP_TIMEOUT.plus(TRANSITION_DURATION.times(2)), ONE_MINUTE);
-		assertEquals(State.IDLE, machineWakingUpToIdle.getState());
+		assertEquals(State.IDLE, machineWakingUpToIdle.state());
 		assertEquals(Time.GENESIS, machineWakingUpToIdle.currentDelay());
 	}
 	

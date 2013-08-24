@@ -24,7 +24,7 @@ public class DataServer {
 		freeSpace += bytes;
 	}
 
-	public Machine getHost() {
+	public Machine host() {
 		return host;
 	}
 	
