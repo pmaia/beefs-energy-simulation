@@ -27,6 +27,6 @@ public abstract class DataPlacement {
 		}
 	}
 
-	public abstract ReplicatedFile createFile(FileSystemClient client, String fullpath, int replicationLevel);
+	public abstract ReplicatedFile createFile(FileSystemClient client, String fullpath, int replicationLevel, long size);
 	
 }

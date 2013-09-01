@@ -80,18 +80,18 @@ public class MetadataServer {
 		}
 	}
 
-	public ReplicatedFile createOrOpen(FileSystemClient client, String path) {
+	public ReplicatedFile createOrOpen(FileSystemClient client, String path, long size) {
 		ReplicatedFile theFile = files.get(path);
 		
 		if(theFile == null) {
-			theFile = createFile(client, path);
+			theFile = createFile(client, path, size);
 		}
 		
 		return theFile;
 	}
 
-	private ReplicatedFile createFile(FileSystemClient client, String fullpath) {
-		ReplicatedFile newFile = dataPlacement.createFile(client, fullpath, replicationLevel);
+	private ReplicatedFile createFile(FileSystemClient client, String fullpath, long size) {
+		ReplicatedFile newFile = dataPlacement.createFile(client, fullpath, replicationLevel, size);
 		
 		files.put(fullpath, newFile);
 		

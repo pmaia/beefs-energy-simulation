@@ -52,7 +52,7 @@ public class UnlinkTest {
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
-		client.createOrOpen(filePath);
+		client.createOrOpen(filePath, 0);
 		
 		replay(eventSourceMock);
 		

@@ -66,7 +66,7 @@ public class WriteTest {
 		write = new Write(client, five, five, filePath, 1024, 2048);
 		write.process();
 		
-		ReplicatedFile file = client.createOrOpen(filePath);
+		ReplicatedFile file = client.createOrOpen(filePath, 0);
 
 		assertEquals(2048L + 1024, file.size());
 		assertFalse(file.areReplicasConsistent());

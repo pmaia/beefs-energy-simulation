@@ -36,15 +36,15 @@ public class FileSystemClient {
 		this.wakeOnLan = wakeOnLan;
 	}
 	
-	public ReplicatedFile createOrOpen(String fullpath) {
-		return metadataServer.createOrOpen(this, fullpath);
+	public ReplicatedFile createOrOpen(String fullpath, long size) {
+		return metadataServer.createOrOpen(this, fullpath, size);
 	}
 	
 	public void read(String filePath, long bytesTransfered, Time begin, Time duration) {
 		if(!host.isReachable()) {
 			readsWhileClientSleeping++;
 		} else {
-			ReplicatedFile file = createOrOpen(filePath);
+			ReplicatedFile file = createOrOpen(filePath, bytesTransfered);
 		
 			DataServer primary = file.primary();
 			if(!primary.host().isReachable() && wakeOnLan){
@@ -63,7 +63,7 @@ public class FileSystemClient {
 		if(!host.isReachable()) {
 			writesWhileClientSleeping++;
 		} else {
-			ReplicatedFile replicatedFile = createOrOpen(filePath);
+			ReplicatedFile replicatedFile = createOrOpen(filePath, bytesTransfered);
 			
 			DataServer primary = replicatedFile.primary();
 			if(primary.host().isReachable()) {

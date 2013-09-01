@@ -53,7 +53,7 @@ public class CloseTest {
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
-		client.createOrOpen(filePath);
+		client.createOrOpen(filePath, 0);
 		
 		replay(eventSourceMock);
 		Close close = new Close(client, closeTime, filePath);
@@ -75,7 +75,7 @@ public class CloseTest {
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
-		client.createOrOpen(filePath);
+		client.createOrOpen(filePath, 0);
 		
 		replay(eventSourceMock);
 		Close close = new Close(client, closeTime, filePath);
@@ -97,7 +97,7 @@ public class CloseTest {
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
-		ReplicatedFile file = client.createOrOpen(filePath);
+		ReplicatedFile file = client.createOrOpen(filePath, 0);
 		file.write(10, 1000);
 		
 		eventSourceMock.addNewEvent(new UpdateFileReplicas(closeTime.plus(timeToCoherence), file, metadataServer));

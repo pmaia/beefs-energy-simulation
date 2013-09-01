@@ -58,7 +58,7 @@ public class ReadTest {
 	@Test
 	public void testFileSizeIsTheSameAfterRead() {
 		String filePath = "/home/patrick/cruzeiro.txt";
-		ReplicatedFile file = client.createOrOpen(filePath);
+		ReplicatedFile file = client.createOrOpen(filePath, 0);
 		file.write(0, 1024);
 		
 		Read read = new Read(client, Time.GENESIS, new Time(5, Unit.MILLISECONDS), filePath, 10);

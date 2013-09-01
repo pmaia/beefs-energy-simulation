@@ -17,7 +17,7 @@ public class Random extends DataPlacement {
 	}
 
 	@Override
-	public ReplicatedFile createFile(FileSystemClient client, String fileName, int replicationLevel) {
+	public ReplicatedFile createFile(FileSystemClient client, String fileName, int replicationLevel, long size) {
 		
 		Set<DataServer> choosenDataServes = 
 			chooseRandomDataServers(dataServers, replicationLevel + 1);
