@@ -16,11 +16,11 @@ import simulation.beefs.model.ReplicatedFile;
  * Keep machines sleeping if some other machine can get the replica
  *
  */
-public class Kind extends Replicator {
+public class MigrateReplicas extends Replicator {
 	
 	private final List<DataServer> dataServers;
 	
-	public Kind(Set<DataServer> dataServers) {
+	public MigrateReplicas(Set<DataServer> dataServers) {
 		if(dataServers != null) {
 			this.dataServers = new ArrayList<DataServer>(dataServers);
 		} else {

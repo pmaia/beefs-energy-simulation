@@ -37,7 +37,7 @@ public class KindTest {
 		DataServer ds1 = new DataServer(machine2, TERABYTE);
 		replicas.add(new FileReplica(ds1, GIGABYTE));
 		
-		Kind kind = new Kind(null);
+		MigrateReplicas kind = new MigrateReplicas(null);
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, replicas);
 		
@@ -66,7 +66,7 @@ public class KindTest {
 		DataServer ds3 = new DataServer(machine3, TERABYTE);
 		availableServers.add(ds3);
 		
-		Kind kind = new Kind(availableServers);
+		MigrateReplicas kind = new MigrateReplicas(availableServers);
 		
 		kind.updateReplicas(file);
 		
@@ -95,7 +95,7 @@ public class KindTest {
 		availableServers.add(ds3);
 		availableServers.add(new DataServer(machine4, TERABYTE));
 		
-		Kind kind = new Kind(availableServers);
+		MigrateReplicas kind = new MigrateReplicas(availableServers);
 		
 		kind.updateReplicas(file);
 		
@@ -121,7 +121,7 @@ public class KindTest {
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, originalReplicas);
 		
-		Kind kind = new Kind(null);
+		MigrateReplicas kind = new MigrateReplicas(null);
 		
 		kind.updateReplicas(file);
 		

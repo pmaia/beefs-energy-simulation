@@ -14,7 +14,7 @@ public abstract class Replicator {
 	public static Replicator newReplicator(String type, Set<DataServer> dataServers) {
 		Replicator replicator = null;
 		if(KIND.equals(type)) {
-			replicator = new Kind(dataServers);
+			replicator = new MigrateReplicas(dataServers);
 		} else if(NOOP.equals(type)) {
 			replicator = new Noop();
 		} else if(FAITHFUL.equals(type)) {
