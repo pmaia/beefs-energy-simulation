@@ -36,16 +36,23 @@ public class ReplicatedFile {
 	}
 	
 	public void write(long bytes, long currentFileSize) {
-		if(primary.freeSpace() < bytes) {
-			String msg = String.format("%%primary write failed in %s (%d %d) - %s", primary.host().name(), bytes, primary.freeSpace(), EventScheduler.now());
-			System.out.println(msg);
-			return;
-		}
-		primary.useDisk(bytes); //i am considering that every write is a append. this is the worst case scenario.
+		long actualBytesWritten = Math.min(bytes, primary.freeSpace());
+		long bytesNotWritten = bytes - actualBytesWritten;
 		
-		size = currentFileSize + bytes;
-		bytesWritten += bytes;
-		replicasAreConsistent = false;
+		if(bytesNotWritten != 0) {
+			String msg = String.format("%%primary write failed in %s (%d bytes not written) - %s", primary.host().name(), 
+					bytesNotWritten, EventScheduler.now());
+			System.out.println(msg);
+		}
+		
+		if(actualBytesWritten > 0) {
+			primary.useDisk(actualBytesWritten); //i am considering that every write is a append. this is the worst case scenario.
+
+			bytesWritten += actualBytesWritten;
+			replicasAreConsistent = false;
+		}
+		
+		size = currentFileSize + actualBytesWritten;
 	}
 
 	public DataServer primary() {
