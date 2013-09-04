@@ -21,7 +21,7 @@ import simulation.beefs.model.Machine;
 import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.ReplicatedFile;
 
-public class KindTest {
+public class MigrateReplicasTest {
 	
 	private static final long GIGABYTE = 1024L * 1024 * 1024;
 	private static final long TERABYTE = GIGABYTE * 1024;
