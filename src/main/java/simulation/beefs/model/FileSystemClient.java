@@ -44,7 +44,7 @@ public class FileSystemClient {
 		if(!host.isReachable()) {
 			readsWhileClientSleeping++;
 		} else {
-			ReplicatedFile file = createOrOpen(filePath, bytesTransfered);
+			ReplicatedFile file = createOrOpen(filePath, 0); //passing 0 as the file size to make sure the ReplicatedFile will be created 
 		
 			DataServer primary = file.primary();
 			if(!primary.host().isReachable() && wakeOnLan){
@@ -64,6 +64,12 @@ public class FileSystemClient {
 			writesWhileClientSleeping++;
 		} else {
 			ReplicatedFile replicatedFile = createOrOpen(filePath, bytesTransfered);
+			
+			if(replicatedFile == null) {
+				String msg = String.format("*could not create file - %s", EventScheduler.now());
+				System.out.println(msg);
+				return;
+			}
 			
 			DataServer primary = replicatedFile.primary();
 			if(primary.host().isReachable()) {

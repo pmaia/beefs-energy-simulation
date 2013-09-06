@@ -10,9 +10,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
+import manelsim.EventScheduler;
 import manelsim.Time;
 import manelsim.Time.Unit;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import simulation.beefs.model.DataServer;
@@ -25,6 +27,11 @@ public class MigrateReplicasTest {
 	
 	private static final long GIGABYTE = 1024L * 1024 * 1024;
 	private static final long TERABYTE = GIGABYTE * 1024;
+	
+	@Before
+	public void setup() {
+		EventScheduler.reset();
+	}
 	
 	@Test
 	public void reuse_already_allocated_data_servers_when_they_are_awake() {

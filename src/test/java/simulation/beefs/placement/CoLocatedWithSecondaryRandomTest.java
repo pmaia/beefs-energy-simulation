@@ -45,7 +45,7 @@ public class CoLocatedWithSecondaryRandomTest {
 	}
 
 	@Test
-	public void shouldColocateIfClientDataServerHasFreeSpace() {
+	public void should_colocate_if_client_data_server_has_free_space() {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(ds1);
 		dataServers.add(ds2);
@@ -63,7 +63,7 @@ public class CoLocatedWithSecondaryRandomTest {
 	}
 	
 	@Test
-	public void shouldNotColocateIfClientDataServerDoesNotHaveFreeSpace() {
+	public void should_not_colocate_if_client_data_server_does_not_have_free_space() {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(ds1);
 		dataServers.add(ds2);
@@ -81,7 +81,7 @@ public class CoLocatedWithSecondaryRandomTest {
 	}
 	
 	@Test
-	public void shouldGiveMeAPrimaryDataServerWithEnoughSpaceForTheFile() {
+	public void should_give_me_a_primary_data_server_with_enough_space_for_the_file() {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(ds1);
 		dataServers.add(fullDS1);
@@ -99,7 +99,7 @@ public class CoLocatedWithSecondaryRandomTest {
 	}
 	
 	@Test
-	public void shouldGiveMeANullPrimaryDataServerWhenThereIsNoDataServerWithFreeSpace() {
+	public void should_return_null_when_there_is_no_data_server_with_free_space() {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(fullDS1);
 		dataServers.add(fullDS2);
@@ -111,12 +111,11 @@ public class CoLocatedWithSecondaryRandomTest {
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);
 
-		assertNull(rf.primary());
-		assertEquals(1, rf.replicas().size());
+		assertNull(rf);
 	}
 	
 	@Test
-	public void shouldGiveMeZeroReplicasWhenTheOnlyDataServerWithFreeSpaceIsUsedForPrimary() {
+	public void should_give_me_zero_replicas_when_the_only_data_server_with_free_space_is_used_for_primary() {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(fullDS1);
 		dataServers.add(ds1);
