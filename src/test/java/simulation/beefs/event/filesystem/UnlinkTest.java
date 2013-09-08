@@ -20,7 +20,7 @@ import simulation.beefs.model.FileSystemClient;
 import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.placement.DataPlacement;
-import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.NeverMigrateReplicas;
 import simulation.beefs.replication.Replicator;
 
 public class UnlinkTest {
@@ -48,7 +48,7 @@ public class UnlinkTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
@@ -69,7 +69,7 @@ public class UnlinkTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		

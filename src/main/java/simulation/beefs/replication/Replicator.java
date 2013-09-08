@@ -19,7 +19,7 @@ public abstract class Replicator {
 		} else if(MIGRATE_REPLICAS_NEVER_WAKE_UP.equals(type)) {
 			replicator = new MigrateReplicas(dataServers, false);
 		} else if(NEVER_MIGRATE_REPLICAS.equals(type)) {
-			replicator = new Faithful();
+			replicator = new NeverMigrateReplicas();
 		} else if(NOOP.equals(type)) {
 			replicator = new Noop();
 		} else {

@@ -21,7 +21,7 @@ import simulation.beefs.model.Machine;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
 import simulation.beefs.placement.DataPlacement;
-import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.NeverMigrateReplicas;
 import simulation.beefs.replication.Replicator;
 
 public class CloseTest {
@@ -49,7 +49,7 @@ public class CloseTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
@@ -71,7 +71,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(cherne, TERABYTE));
 		dataServers.add(new DataServer(pepino, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
@@ -93,7 +93,7 @@ public class CloseTest {
 		dataServers.add(new DataServer(cherne, TERABYTE));
 		dataServers.add(new DataServer(pepino, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		
@@ -116,7 +116,7 @@ public class CloseTest {
 		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
 		

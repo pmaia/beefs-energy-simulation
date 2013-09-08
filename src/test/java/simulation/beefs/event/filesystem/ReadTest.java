@@ -22,7 +22,7 @@ import simulation.beefs.model.Machine.State;
 import simulation.beefs.model.MetadataServer;
 import simulation.beefs.model.ReplicatedFile;
 import simulation.beefs.placement.DataPlacement;
-import simulation.beefs.replication.Faithful;
+import simulation.beefs.replication.NeverMigrateReplicas;
 import simulation.beefs.replication.Replicator;
 import simulation.beefs.util.ObservableEventSourceMultiplexer;
 
@@ -49,7 +49,7 @@ public class ReadTest {
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
-		Replicator replicator = new Faithful();
+		Replicator replicator = new NeverMigrateReplicas();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		
 		client = new FileSystemClient(jurupoca, metadataServer, true);

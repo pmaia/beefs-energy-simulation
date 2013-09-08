@@ -13,7 +13,7 @@ import simulation.beefs.model.ReplicatedFile;
  * All replicas are bind to a specific data server
  *
  */
-public class Faithful extends Replicator {
+public class NeverMigrateReplicas extends Replicator {
 
 	@Override
 	public void updateReplicas(ReplicatedFile file) {
