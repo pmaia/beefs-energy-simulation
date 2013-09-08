@@ -58,7 +58,8 @@ public class MigrateReplicas extends Replicator {
 		}
 		
 		if(newReplicas.size() < file.expectedReplicationLevel() && newDataServer != null) {
-			for(int i = 0; i < (file.expectedReplicationLevel() - newReplicas.size()); i++) {
+			int replicasDebt = file.expectedReplicationLevel() - newReplicas.size();
+			for(int i = 0; i < replicasDebt; i++) {
 				newDataServer = giveMeOneAwakeDataServer(exceptions, file.size());
 
 				if(newDataServer != null) {
