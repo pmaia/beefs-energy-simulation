@@ -39,6 +39,7 @@ public class WriteTest {
 	private FileSystemClient client;
 	private MetadataServer metadataServer;
 	private Machine jurupoca;
+	private Set<DataServer> dataServers = new HashSet<DataServer>();
 	
 	@Before
 	public void setup() {
@@ -46,16 +47,20 @@ public class WriteTest {
 		jurupoca.setIdle(Time.GENESIS, ONE_MINUTE);
 		
 		Time timeToCoherence = new Time(5 * 60, Unit.SECONDS);
-		Set<DataServer> dataServers = new HashSet<DataServer>();
 		dataServers.add(new DataServer(jurupoca, TERABYTE));
+
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new Faithful();
-		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
+		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 1, timeToCoherence);
 		client = new FileSystemClient(jurupoca, metadataServer, true);		
 	}
 	
 	@Test
 	public void testWritesChangingFileSize() {
+		Machine pepino = new Machine("pepino", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
+		pepino.setIdle(Time.GENESIS, ONE_MINUTE);
+		dataServers.add(new DataServer(pepino, TERABYTE));
+		
 		String filePath = "/home/patrick/teste.txt";
 		Time zero = Time.GENESIS;
 		Time five = new Time(5, Unit.MILLISECONDS);
@@ -69,7 +74,7 @@ public class WriteTest {
 		ReplicatedFile file = client.createOrOpen(filePath, 0);
 
 		assertEquals(2048L + 1024, file.size());
-		assertFalse(file.areReplicasConsistent());
+		assertFalse(file.replicasAreConsistent());
 	}
 	
 	/*

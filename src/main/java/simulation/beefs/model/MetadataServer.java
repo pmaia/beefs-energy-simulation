@@ -46,7 +46,7 @@ public class MetadataServer {
 	public void close(String filePath) {
 		ReplicatedFile file = files.get(filePath);
 		
-		if(file != null && !file.areReplicasConsistent() && file.replicas().size() > 0) {
+		if(file != null && !file.replicasAreConsistent() && file.replicas().size() > 0) {
 			cleanUpProcessedEvents();
 			Time now = EventScheduler.now();
 			UpdateFileReplicas old = scheduledUpdateReplicasEvents.get(file.fullPath());

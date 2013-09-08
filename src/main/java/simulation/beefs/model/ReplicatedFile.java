@@ -13,13 +13,12 @@ public class ReplicatedFile {
 	
 	private long size = 0;
 	private long bytesWritten = 0;
-	private boolean replicasAreConsistent = true;
 	private Set<FileReplica> replicas;
 	
 	public ReplicatedFile(String fullpath, DataServer primary, int expectedReplicationLevel, Set<FileReplica> replicas) {
 		this.fullpath = fullpath;
 		this.primary = primary;
-		this.replicas = replicas;
+		this.replicas = (replicas != null) ? replicas : new HashSet<FileReplica>();
 		this.expectedReplicationLevel = expectedReplicationLevel;
 	}
 	
@@ -28,11 +27,12 @@ public class ReplicatedFile {
 		for(FileReplica replica : replicas) {
 			replica.delete();
 		}
+		System.out.println(String.format("!%s deleted - %s", fullpath, EventScheduler.now()));
 	}
 	
 	public void updateReplicas(Set<FileReplica> replicas) {
 		this.replicas = replicas;
-		replicasAreConsistent = true;
+		logChange();
 	}
 	
 	public void write(long bytes, long currentFileSize) {
@@ -49,10 +49,27 @@ public class ReplicatedFile {
 			primary.useDisk(actualBytesWritten); //i am considering that every write is a append. this is the worst case scenario.
 
 			bytesWritten += actualBytesWritten;
-			replicasAreConsistent = false;
+			if(replicasAreConsistent()) {
+				invalidateReplicas();
+				logChange();
+			}
 		}
 		
 		size = currentFileSize + actualBytesWritten;
+	}
+
+	private void logChange() {
+		System.out.println(String.format("!%s %d - %s", fullpath, replicasUpToDate(), EventScheduler.now()));
+	}
+
+	private int replicasUpToDate() {
+		int count = 0;
+		for(FileReplica replica : replicas) {
+			if(replica.isConsistent()) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	public DataServer primary() {
@@ -75,8 +92,13 @@ public class ReplicatedFile {
 		return size;
 	}
 	
-	public boolean areReplicasConsistent() {
-		return replicasAreConsistent;
+	public boolean replicasAreConsistent() {
+		for(FileReplica replica : replicas) {
+			if(!replica.isConsistent()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public int actualReplicationLevel() {
@@ -86,5 +108,11 @@ public class ReplicatedFile {
 	public int expectedReplicationLevel() {
 		return expectedReplicationLevel;
 	}
+	
+	private void invalidateReplicas() {
+		for(FileReplica replica : replicas) {
+			replica.invalidate();
+		}
+ 	}
 
 }
