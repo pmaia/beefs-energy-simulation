@@ -44,7 +44,7 @@ public class MigrateReplicasTest {
 		DataServer ds1 = new DataServer(machine2, TERABYTE);
 		replicas.add(new FileReplica(ds1, GIGABYTE));
 		
-		MigrateReplicas kind = new MigrateReplicas(null);
+		MigrateReplicas kind = new MigrateReplicas(null, true);
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, replicas);
 		
@@ -73,7 +73,7 @@ public class MigrateReplicasTest {
 		DataServer ds3 = new DataServer(machine3, TERABYTE);
 		availableServers.add(ds3);
 		
-		MigrateReplicas kind = new MigrateReplicas(availableServers);
+		MigrateReplicas kind = new MigrateReplicas(availableServers, true);
 		
 		kind.updateReplicas(file);
 		
@@ -102,7 +102,7 @@ public class MigrateReplicasTest {
 		availableServers.add(ds3);
 		availableServers.add(new DataServer(machine4, TERABYTE));
 		
-		MigrateReplicas kind = new MigrateReplicas(availableServers);
+		MigrateReplicas kind = new MigrateReplicas(availableServers, true);
 		
 		kind.updateReplicas(file);
 		
@@ -128,7 +128,7 @@ public class MigrateReplicasTest {
 		
 		ReplicatedFile file = new ReplicatedFile("/the/file/path", primary, 1, originalReplicas);
 		
-		MigrateReplicas kind = new MigrateReplicas(null);
+		MigrateReplicas kind = new MigrateReplicas(null, true);
 		
 		kind.updateReplicas(file);
 		

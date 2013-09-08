@@ -7,18 +7,21 @@ import simulation.beefs.model.ReplicatedFile;
 
 public abstract class Replicator {
 	
-	private static final String KIND =  "kind";
+	private static final String MIGRATE_REPLICAS_WAKE_UP =  "migrate_replicas_wake_up";
+	private static final String MIGRATE_REPLICAS_NEVER_WAKE_UP =  "migrate_replicas_never_wake_up";
 	private static final String NOOP = "noop";
-	private static final String FAITHFUL = "faithful";
+	private static final String NEVER_MIGRATE_REPLICAS = "never_migrate_replicas";
 	
 	public static Replicator newReplicator(String type, Set<DataServer> dataServers) {
 		Replicator replicator = null;
-		if(KIND.equals(type)) {
-			replicator = new MigrateReplicas(dataServers);
+		if(MIGRATE_REPLICAS_WAKE_UP.equals(type)) {
+			replicator = new MigrateReplicas(dataServers, true);
+		} else if(MIGRATE_REPLICAS_NEVER_WAKE_UP.equals(type)) {
+			replicator = new MigrateReplicas(dataServers, false);
+		} else if(NEVER_MIGRATE_REPLICAS.equals(type)) {
+			replicator = new Faithful();
 		} else if(NOOP.equals(type)) {
 			replicator = new Noop();
-		} else if(FAITHFUL.equals(type)) {
-			replicator = new Faithful();
 		} else {
 			throw new RuntimeException("Unknown replicator type " + type);
 		}

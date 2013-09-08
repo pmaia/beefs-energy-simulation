@@ -19,8 +19,10 @@ import simulation.beefs.model.ReplicatedFile;
 public class MigrateReplicas extends Replicator {
 	
 	private final List<DataServer> dataServers;
+	private final boolean wakeOnLan;
 	
-	public MigrateReplicas(Set<DataServer> dataServers) {
+	public MigrateReplicas(Set<DataServer> dataServers, boolean wakeOnLan) {
+		this.wakeOnLan = wakeOnLan;
 		if(dataServers != null) {
 			this.dataServers = new ArrayList<DataServer>(dataServers);
 		} else {
@@ -85,23 +87,24 @@ public class MigrateReplicas extends Replicator {
 
 	private DataServer wakeUpWhoIsSleepingForLonger(long fileSize) {
 		DataServer unfortunateDataServer = null;
-		
-		for(DataServer ds : dataServers) {
-			if(!ds.host().isReachable()) {
-				if(ds.freeSpace() >= fileSize) {
-					if(unfortunateDataServer == null) {
-						unfortunateDataServer = ds;
-					} else if(ds.host().lastTransitionTime().
-							isEarlierThan(unfortunateDataServer.host().lastTransitionTime())) {
-						unfortunateDataServer = ds;
-					}					
+		if(wakeOnLan) {
+			for(DataServer ds : dataServers) {
+				if(!ds.host().isReachable()) {
+					if(ds.freeSpace() >= fileSize) {
+						if(unfortunateDataServer == null) {
+							unfortunateDataServer = ds;
+						} else if(ds.host().lastTransitionTime().
+								isEarlierThan(unfortunateDataServer.host().lastTransitionTime())) {
+							unfortunateDataServer = ds;
+						}					
+					}
 				}
 			}
-		}
-		if( unfortunateDataServer != null) {
-			unfortunateDataServer.host().wakeOnLan(EventScheduler.now());
-		} else {
-			System.out.println(String.format("@all disks full: could not replicate %d bytes - %s", fileSize, EventScheduler.now()));
+			if( unfortunateDataServer != null) {
+				unfortunateDataServer.host().wakeOnLan(EventScheduler.now());
+			} else {
+				System.out.println(String.format("@all disks full: could not replicate %d bytes - %s", fileSize, EventScheduler.now()));
+			}
 		}
 		return unfortunateDataServer;
 	}
