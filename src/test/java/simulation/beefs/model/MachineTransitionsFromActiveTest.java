@@ -95,7 +95,7 @@ public class MachineTransitionsFromActiveTest {
 		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		
 		EventScheduler.start();
-		assertEquals(2, EventScheduler.processCount());
+		assertEquals(2, EventScheduler.eventsCount());
 		
 		assertEquals(State.SLEEPING, machine.state());
 		assertEquals(1, machine.sleepIntervals().size());
@@ -141,7 +141,7 @@ public class MachineTransitionsFromActiveTest {
 		assertTrue(machine.userIdlenessIntervals().contains(expectedInterval));
 		
 		EventScheduler.start();
-		assertEquals(2, EventScheduler.processCount());
+		assertEquals(2, EventScheduler.eventsCount());
 		
 		assertEquals(State.SLEEPING, machine.state());
 		assertEquals(1, machine.sleepIntervals().size());

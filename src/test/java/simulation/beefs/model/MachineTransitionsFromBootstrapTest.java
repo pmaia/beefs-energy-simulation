@@ -72,7 +72,7 @@ public class MachineTransitionsFromBootstrapTest {
 		
 		EventScheduler.start();
 		
-		assertEquals(2, EventScheduler.processCount());
+		assertEquals(2, EventScheduler.eventsCount());
 		assertEquals(State.SLEEPING, machine.state());
 		assertEquals(0, machine.userActivityIntervals().size());
 		assertEquals(1, machine.sleepIntervals().size());
@@ -107,7 +107,7 @@ public class MachineTransitionsFromBootstrapTest {
 		
 		EventScheduler.start();
 		
-		assertEquals(2, EventScheduler.processCount());
+		assertEquals(2, EventScheduler.eventsCount());
 		assertEquals(State.SLEEPING, machine.state());
 		assertEquals(0, machine.userActivityIntervals().size());
 		assertEquals(1, machine.sleepIntervals().size());

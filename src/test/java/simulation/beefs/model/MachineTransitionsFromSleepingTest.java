@@ -60,7 +60,7 @@ public class MachineTransitionsFromSleepingTest {
 		
 		EventScheduler.start();
 		
-		assertEquals(3, EventScheduler.processCount()); // IDLE -> SLEEP, TRANSITION -> SLEEP, TRANSITION -> ACTIVE
+		assertEquals(3, EventScheduler.eventsCount()); // IDLE -> SLEEP, TRANSITION -> SLEEP, TRANSITION -> ACTIVE
 		
 		assertEquals(State.ACTIVE, machine.state());
 		assertEquals(1, machine.sleepIntervals().size());
@@ -94,7 +94,7 @@ public class MachineTransitionsFromSleepingTest {
 		assertEquals(1, machine.userIdlenessIntervals().size());
 		
 		EventScheduler.start();
-		assertEquals(3, EventScheduler.processCount()); //IDLE -> SLEEP, TRANSITION -> SLEEP, SLEEP -> IDLE
+		assertEquals(3, EventScheduler.eventsCount()); //IDLE -> SLEEP, TRANSITION -> SLEEP, SLEEP -> IDLE
 		
 		assertEquals(State.IDLE, machine.state());
 		assertEquals(1, machine.sleepIntervals().size());

@@ -2,9 +2,11 @@ package simulation.beefs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import manelsim.Context;
+import manelsim.EventScheduler;
 import manelsim.Summarizer;
 import simulation.beefs.energy.EnergyConsumptionModel;
 import simulation.beefs.energy.EnergyState;
@@ -67,6 +69,11 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 					kWh, 
 					dataServer.host().transitionIntervals().size(),
 					dataServer.freeSpace()));
+		}
+		
+		sb.append("\n\nEvent type\tcount");
+		for(Entry<String, Long> entry : EventScheduler.eventsCountByType().entrySet()) {
+			sb.append(String.format("%s\t%d", entry.getKey(), entry.getValue()));
 		}
 		
 		return sb.toString();
