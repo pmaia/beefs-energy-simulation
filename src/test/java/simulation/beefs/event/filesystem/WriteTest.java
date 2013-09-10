@@ -52,7 +52,7 @@ public class WriteTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 1, timeToCoherence);
-		client = new FileSystemClient(jurupoca, metadataServer, true);		
+		client = new FileSystemClient(jurupoca, metadataServer);		
 	}
 	
 	@Test
@@ -77,10 +77,6 @@ public class WriteTest {
 		assertFalse(file.replicasAreConsistent());
 	}
 	
-	/*
-	 * If client and data server are in different machine, the target machine is sleeping and client is configured to 
-	 * use wakeOnLan...
-	 */
 	@Test
 	public void testWriteIsProperlyReScheduled() { 
 		String fullpath = "/home/beefs/arquivo.txt";
@@ -98,7 +94,7 @@ public class WriteTest {
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
 		awakeMachine.setActive(ONE_MINUTE, ONE_MINUTE.times(60));
-		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer, true);
+		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer);
 		
 		// call write
 		Time writeDuration = new Time(500, Unit.MILLISECONDS);
@@ -125,45 +121,7 @@ public class WriteTest {
 		
 		assertEquals(0, client.writesWhileClientSleeping());
 	}
-	
-	/*
-	 * If client and data server are in different machine, the target machine is sleeping and client is not configured 
-	 * to use wakeOnLan... 
-	 */
-	@Test
-	public void testWriteIsProperlyRegisteredAndIgnored() {
-		String fullpath = "/home/beefs/arquivo.txt";
 		
-		// setup the scenario
-		ObservableEventSourceMultiplexer eventsMultiplexer = new ObservableEventSourceMultiplexer(new EventSource[0]);
-		EventScheduler.setup(Time.GENESIS, Time.THE_FINAL_JUDGMENT, eventsMultiplexer);
-
-		// making jurupoca sleep
-		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
-		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
-		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.state());
-		
-		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
-		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
-		awakeMachine.setActive(ONE_MINUTE, ONE_MINUTE.times(60));
-		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer, false);
-		
-		int queueSizeBefore = eventsMultiplexer.queueSize();
-		
-		// call write
-		Time writeDuration = new Time(500, Unit.MILLISECONDS);
-		Time aTimeJurupocaIsSleeping = new Time(17*60 + 4, Unit.SECONDS); // 17 min:4 sec
-		Write write = new Write(otherClient, aTimeJurupocaIsSleeping, writeDuration, fullpath, 1024, 1024*1024);
-		write.process();
-		
-		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.state());
-		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
-		
-		assertEquals(1, otherClient.writesWhileDataServerSleeping());
-	}
-	
 	/*
 	 * If client machine is sleeping...
 	 */

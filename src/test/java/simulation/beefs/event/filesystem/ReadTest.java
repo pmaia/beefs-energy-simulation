@@ -52,7 +52,7 @@ public class ReadTest {
 		Replicator replicator = new NeverMigrateReplicas();
 		metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
 		
-		client = new FileSystemClient(jurupoca, metadataServer, true);
+		client = new FileSystemClient(jurupoca, metadataServer);
 	}
 	
 	@Test
@@ -67,10 +67,6 @@ public class ReadTest {
 		assertEquals(1024, file.size());
 	}
 	
-	/*
-	 * If client and data server are in different machine, the target machine is sleeping and client is configured to 
-	 * use wakeOnLan...
-	 */
 	@Test
 	public void testReadIsProperlyReScheduled() { 
 		String fullpath = "/home/beefs/arquivo.txt";
@@ -88,7 +84,7 @@ public class ReadTest {
 		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
 		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
 		awakeMachine.setActive(ONE_MINUTE, ONE_MINUTE.times(60));
-		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer, true);
+		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer);
 		
 		// call read
 		Time readDuration = new Time(500, Unit.MILLISECONDS);
@@ -114,43 +110,6 @@ public class ReadTest {
 		assertEquals(0, client.readsWhileClientSleeping());
 	}
 	
-	/*
-	 * If client and data server are in different machine, the target machine is sleeping and client is not configured 
-	 * to use wakeOnLan... 
-	 */
-	@Test
-	public void testReadIsProperlyRegisteredAndIgnored() {
-		String fullpath = "/home/beefs/arquivo.txt";
-		
-		// setup the scenario
-		ObservableEventSourceMultiplexer eventsMultiplexer = new ObservableEventSourceMultiplexer(new EventSource[0]);
-		EventScheduler.setup(Time.GENESIS, Time.THE_FINAL_JUDGMENT, eventsMultiplexer);
-
-		// making jurupoca sleep
-		jurupoca.setActive(ONE_MINUTE, ONE_MINUTE);
-		jurupoca.setIdle(ONE_MINUTE.times(2), TO_SLEEP_TIMEOUT.plus(ONE_MINUTE));
-		EventScheduler.start();
-		assertEquals(State.SLEEPING, jurupoca.state());
-		
-		Machine awakeMachine = new Machine("cherne", TO_SLEEP_TIMEOUT, TRANSITION_DURATION);
-		awakeMachine.setIdle(Time.GENESIS, ONE_MINUTE);
-		awakeMachine.setActive(ONE_MINUTE, ONE_MINUTE.times(60));
-		FileSystemClient otherClient = new FileSystemClient(awakeMachine, metadataServer, false);
-		
-		int queueSizeBefore = eventsMultiplexer.queueSize();
-		
-		// call read
-		Time readDuration = new Time(500, Unit.MILLISECONDS);
-		Time aTimeJurupocaIsSleeping = new Time(17*60 + 4, Unit.SECONDS); // 17 min:4 sec
-		Read read = new Read(otherClient, aTimeJurupocaIsSleeping, readDuration, fullpath, 1024);
-		read.process();
-		
-		// the status must not change
-		assertEquals(State.SLEEPING, jurupoca.state());
-		assertEquals(queueSizeBefore, eventsMultiplexer.queueSize());
-		
-		assertEquals(1, otherClient.readsWhileDataServerSleeping());
-	}
 	
 	/*
 	 * If client machine is sleeping...

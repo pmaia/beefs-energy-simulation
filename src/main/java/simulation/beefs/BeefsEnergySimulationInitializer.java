@@ -163,10 +163,9 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 	private Set<FileSystemClient> _clients = null;
 	private Set<FileSystemClient> clients() {
 		if(_clients == null) {
-			Boolean wakeOnLan = Boolean.valueOf(config.getProperty(BeefsEnergySimulationConstants.WAKE_ON_LAN));
 			_clients = new HashSet<FileSystemClient>();
 			for(Machine machine : machines()) {
-				_clients.add(new FileSystemClient(machine, metadataServer(), wakeOnLan));
+				_clients.add(new FileSystemClient(machine, metadataServer()));
 			}
 		}
 		return _clients;

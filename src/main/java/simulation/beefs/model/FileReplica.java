@@ -33,6 +33,10 @@ public class FileReplica {
 		deleted = true;
 	}
 	
+	public long size() {
+		return size;
+	}
+	
 	public DataServer dataServer() {
 		return dataServer;
 	}

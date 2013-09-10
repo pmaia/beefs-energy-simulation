@@ -50,7 +50,7 @@ public class UnlinkTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		client.createOrOpen(filePath, 0);
 		
@@ -71,7 +71,7 @@ public class UnlinkTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		replay(eventSourceMock);
 		

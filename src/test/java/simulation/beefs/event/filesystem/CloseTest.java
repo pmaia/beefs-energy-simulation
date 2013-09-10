@@ -51,7 +51,7 @@ public class CloseTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		client.createOrOpen(filePath, 0);
 		
@@ -73,7 +73,7 @@ public class CloseTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		client.createOrOpen(filePath, 0);
 		
@@ -95,7 +95,7 @@ public class CloseTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 2, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		ReplicatedFile file = client.createOrOpen(filePath, 0);
 		file.write(10, 1000);
@@ -118,7 +118,7 @@ public class CloseTest {
 		DataPlacement dataPlacementAlgorithm = DataPlacement.newDataPlacement(DataPlacement.RANDOM, dataServers);
 		Replicator replicator = new NeverMigrateReplicas();
 		MetadataServer metadataServer = new MetadataServer(dataServers, dataPlacementAlgorithm, replicator, 0, timeToCoherence);
-		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer, true);
+		FileSystemClient client = new FileSystemClient(jurupoca, metadataServer);
 		
 		replay(eventSourceMock);
 		Close close = new Close(client, closeTime, filePath);

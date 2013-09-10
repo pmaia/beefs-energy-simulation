@@ -52,7 +52,7 @@ public class CoLocatedWithSecondaryRandomTest {
 		
 		MetadataServer ms = new MetadataServer(dataServers, null, null, 0, null);
 		
-		FileSystemClient client =  new FileSystemClient(machine1, ms, false);		
+		FileSystemClient client =  new FileSystemClient(machine1, ms);		
 		
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);
@@ -71,7 +71,7 @@ public class CoLocatedWithSecondaryRandomTest {
 		
 		MetadataServer ms = new MetadataServer(dataServers, null, null, 0, null);
 		
-		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms, false);		
+		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms);		
 		
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);
@@ -89,7 +89,7 @@ public class CoLocatedWithSecondaryRandomTest {
 		
 		MetadataServer ms = new MetadataServer(dataServers, null, null, 0, null);
 		
-		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms, false);		
+		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms);		
 		
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);
@@ -106,7 +106,7 @@ public class CoLocatedWithSecondaryRandomTest {
 		
 		MetadataServer ms = new MetadataServer(dataServers, null, null, 0, null);
 		
-		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms, false);		
+		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms);		
 		
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);
@@ -122,7 +122,7 @@ public class CoLocatedWithSecondaryRandomTest {
 		
 		MetadataServer ms = new MetadataServer(dataServers, null, null, 0, null);
 		
-		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms, false);		
+		FileSystemClient client =  new FileSystemClient(machineForFullDS1, ms);		
 		
 		DataPlacement placement = new CoLocatedWithSecondaryRandom(dataServers);
 		ReplicatedFile rf = placement.createFile(client, "/home/pmaia/test.txt", 1, 10);

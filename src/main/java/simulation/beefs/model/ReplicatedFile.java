@@ -8,11 +8,11 @@ import manelsim.EventScheduler;
 public class ReplicatedFile {
 	
 	private final String fullpath;
-	private final DataServer primary;
 	private final int expectedReplicationLevel;
 	
 	private long size = 0;
 	private long bytesWritten = 0;
+	private DataServer primary;
 	private Set<FileReplica> replicas;
 	
 	public ReplicatedFile(String fullpath, DataServer primary, int expectedReplicationLevel, Set<FileReplica> replicas) {
@@ -114,5 +114,15 @@ public class ReplicatedFile {
 			replica.invalidate();
 		}
  	}
+
+	public void promoteReplica(FileReplica replica) {
+		primary.cleanSpace(bytesWritten);
+		
+		primary = replica.dataServer();
+		bytesWritten = replica.size();
+		
+		replicas.remove(replica);
+		logChange();
+	}
 
 }
