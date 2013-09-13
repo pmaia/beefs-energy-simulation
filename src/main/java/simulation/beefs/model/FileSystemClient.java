@@ -85,6 +85,7 @@ public class FileSystemClient {
 				} 
 				primary.host().wakeOnLan(begin);
 
+				System.out.println("delayed write");
 				Time delta = primary.host().transitionDuration().plus(ONE_SECOND);
 				EventScheduler.schedule(
 						new Write(this, begin.plus(delta), duration, filePath, bytesTransfered, fileSize, false));
