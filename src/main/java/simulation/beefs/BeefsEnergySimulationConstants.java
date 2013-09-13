@@ -12,7 +12,7 @@ public class BeefsEnergySimulationConstants {
 	public static final String TRANSITION_DURATION = "transition_duration";
 	public static final String EMULATION_START_TIME = "simulation_start";
 	public static final String REPLICATOR = "replicator";
-	public static final String FREE_SPACE = "free_space";
+	public static final String FREE_SPACE = "_free_space";
 	
 	// Context keys
 	public static final String MACHINES = "machines";

@@ -173,11 +173,12 @@ public class BeefsEnergySimulationInitializer implements Initializer {
 	
 	private Set<DataServer> _dataServers;
 	private Set<DataServer> dataServers(){
-		long freeSpace = Long.valueOf(config.getProperty(BeefsEnergySimulationConstants.FREE_SPACE));
 		if(_dataServers == null) {
 			_dataServers = new HashSet<DataServer>();
 
 			for (Machine machine : machines()) {
+				String freeSpaceKey = machine.name() + BeefsEnergySimulationConstants.FREE_SPACE;
+				long freeSpace = Long.valueOf(config.getProperty(freeSpaceKey));
 				_dataServers.add(new DataServer(machine, freeSpace));
 			}
 		}
