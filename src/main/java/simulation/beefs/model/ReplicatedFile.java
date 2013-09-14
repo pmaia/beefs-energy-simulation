@@ -49,7 +49,7 @@ public class ReplicatedFile {
 			primary.useDisk(actualBytesWritten); //i am considering that every write is a append. this is the worst case scenario.
 
 			bytesWritten += actualBytesWritten;
-			if(replicasAreConsistent()) {
+			if(replicasAreConsistent() && expectedReplicationLevel != 0) {
 				invalidateReplicas();
 				logChange();
 			}

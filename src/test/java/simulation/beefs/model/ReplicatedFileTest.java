@@ -56,8 +56,13 @@ public class ReplicatedFileTest {
 	@Test
 	public void should_log_number_of_updated_replicas_on_writes() {
 		Machine host = new Machine("jurupoca", Time.GENESIS, Time.GENESIS);
-		DataServer primary = new DataServer(host, 1024);
-		ReplicatedFile rf = new ReplicatedFile("/teste.txt", primary, 0, null);
+		DataServer primary = new DataServer(host, 2048);
+
+		Machine host1 = new Machine("pepino", Time.GENESIS, Time.GENESIS);
+		Set<FileReplica> replicas = new HashSet<FileReplica>();
+		replicas.add(new FileReplica(new DataServer(host1, 2048), 1024));
+		
+		ReplicatedFile rf = new ReplicatedFile("/teste.txt", primary, 1, null);
 
 		rf.write(2048, 2048);
 
@@ -68,12 +73,15 @@ public class ReplicatedFileTest {
 	public void should_log_number_of_updated_replicas_on_update_replicas() {
 		Machine host = new Machine("jurupoca", Time.GENESIS, Time.GENESIS);
 		DataServer primary = new DataServer(host, 1024);
-		ReplicatedFile rf = new ReplicatedFile("/teste.txt", primary, 0, null);
-
-		rf.write(2048, 2048);
-		
 		Set<FileReplica> replicas = new HashSet<FileReplica>();
 		replicas.add(new FileReplica(new DataServer(new Machine("a", Time.GENESIS,  Time.GENESIS), 1024), 0));
+		
+		ReplicatedFile rf = new ReplicatedFile("/teste.txt", primary, 1, replicas);
+
+		rf.write(2048, 2048);
+
+		replicas.clear();
+		replicas.add(new FileReplica(new DataServer(new Machine("a", Time.GENESIS,  Time.GENESIS), 2048), 0));
 		rf.updateReplicas(replicas);
 
 		assertTrue(outContent.toString().contains("!/teste.txt 1 - 0"));
