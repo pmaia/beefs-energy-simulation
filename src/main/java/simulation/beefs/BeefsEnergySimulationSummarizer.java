@@ -73,7 +73,7 @@ public class BeefsEnergySimulationSummarizer implements Summarizer {
 		
 		sb.append("\n\nEvent type\tcount");
 		for(Entry<String, Long> entry : EventScheduler.eventsCountByType().entrySet()) {
-			sb.append(String.format("%s\t%d", entry.getKey(), entry.getValue()));
+			sb.append(String.format("%s\t%d\n", entry.getKey(), entry.getValue()));
 		}
 		
 		return sb.toString();
